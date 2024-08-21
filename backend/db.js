@@ -1,21 +1,19 @@
+const mysql = require('mysql2');
+
 // กำหนดค่าการเชื่อมต่อฐานข้อมูล MySQL
-const db = mysql.createPool({
-    host: 'mysql',
+const db = mysql.createConnection({
+    host: 'mysql', // ใช้ชื่อ service ใน docker-compose.yml
     user: 'root',
     password: 'root',
-    database: 'transfer',
-    connectionLimit: 10 // กำหนดขีดจำกัดการเชื่อมต่อ
-});
-
-
-// เชื่อมต่อฐานข้อมูล
-db.getConnection((err, connection) => {
+    database: 'transfer'
+  });
+  
+  db.connect((err) => {
     if (err) {
-        console.error('Error connecting to the database:', err.stack);
-        process.exit(1);
+      console.error('Error connecting to the database:', err.stack);
+      return;
     }
-    console.log('Database connected');
-    connection.release();
-});
+    console.log('Connected to the database');
+  });
 
-module.exports = db;
+  module.exports = db;
