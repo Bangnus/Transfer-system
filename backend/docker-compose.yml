@@ -9,6 +9,21 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: npm run dev
+    restart: always
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    platform: linux/x86_64
 
   mysql:
     image: mysql:latest
@@ -43,4 +58,4 @@ services:
         condition: service_healthy
 
 volumes:
-  mysql-data:
+    mysql-data:
