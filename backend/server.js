@@ -1,73 +1,39 @@
 const express = require('express');
-// const bcrypt = require('bcryptjs');
-// const jwt = require('jsonwebtoken');
-const db = require('./db')
+const cors = require('cors');
+const pool = require('./db');
+const { PrismaClient } = require('@prisma/client');
+const axios = require('axios');
+require('dotenv').config();
+require('./config/passport');
+const { readdirSync } = require('fs');
+const passport = require('passport');
 
 const app = express();
 const port = 5000;
+const prisma = new PrismaClient();
 
 app.use(express.json());
+app.use(cors());
 
-// // ลงทะเบียนผู้ใช้ใหม่
-// app.post('/register', (req, res) => {
-//     const { username, password } = req.body;
-//     const hashedPassword = bcrypt.hashSync(password, 8);
-
-//     db.query(
-//         'INSERT INTO students (username, password) VALUES (?, ?)',
-//         [username, hashedPassword],
-//         (err, results) => {
-//             if (err) {
-//                 console.error('Error registering user:', err);
-//                 return res.status(500).send('Server error');
-//             }
-//             res.status(201).send('User registered');
-//         }
-//     );
-// });
-
-// // ล็อกอินผู้ใช้
-// app.post('/login', (req, res) => {
-//     const { username, password } = req.body;
-
-//     db.query(
-//         'SELECT * FROM students WHERE username = ?',
-//         [username],
-//         (err, results) => {
-//             if (err) {
-//                 console.error('Error fetching user:', err);
-//                 return res.status(500).send('Server error');
-//             }
-//             if (results.length === 0) {
-//                 return res.status(401).send('Invalid username or password');
-//             }
-
-//             const user = results[0];
-//             const passwordIsValid = bcrypt.compareSync(password, user.password);
-
-//             if (!passwordIsValid) {
-//                 return res.status(401).send('Invalid username or password');
-//             }
-
-//             const token = jwt.sign({ id: user.id }, 'secretkey', { expiresIn: '1h' });
-//             res.status(200).send({ auth: true, token });
-//         }
-//     );
-// });
-
-// ดึงข้อมูลผู้ใช้ทั้งหมด
-app.get('/students_info', (req, res) => {
-    db.query('SELECT id, username, student_id, citizen_id, faculty, branch, previous_school FROM students_info', (err, results) => {
-        if (err) {
-            console.error('Error fetching users:', err);
-            return res.status(500).send('Server error');
-        }
-        console.log(results); // ตรวจสอบข้อมูลที่ได้รับ
-        res.status(200).json(results);
-    });
+app.get('/', async (req, res) => {
+    try {
+        return res.status(200).json({ message: 'Welcome to Node.js and Express API!' });
+    } catch (error) {
+        return res.status(500).json({ 
+            message: 'Server Error', 
+            error: error.message 
+        });
+    }
 });
+// addCourseStudent
+app.use('/api/addcourse', require('./routers/student'));
+// addtransferCourse
+app.use('/api/addtransfer', require('./routers/transferCourse'));
+app.use('/api/authenticate', require('./routers/auth'));
 
+readdirSync('./routers').map((r) => app.use('/api/v1', passport.authenticate('jwt', {session: false}), require('./routers/' +  r)));
 
+console.log(readdirSync('./routers'))
 // เริ่มต้นเซิร์ฟเวอร์
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

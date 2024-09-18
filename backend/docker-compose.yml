@@ -1,61 +1,62 @@
-version: '3.8'
+version: '3.8' # กำหนดเวอร์ชันของ Docker Compose ที่ใช้
 
-services:
-  node-server:
-    container_name: node
-    build: .
+services: # ระบุ services ที่จะรันใน Docker Compose
+
+  node-server: # ชื่อ service ของ Node.js server
+    container_name: node # ตั้งชื่อ container ว่า "node"
+    build: . # ระบุว่าจะสร้าง image จาก Dockerfile ใน directory ปัจจุบัน
     ports:
-      - "5000:5000"
+      - "5000:5000" # map พอร์ต 5000 ของ container กับพอร์ต 5000 ของ host machine
     depends_on:
-      mysql:
-        condition: service_healthy
+      postgres:
+        condition: service_healthy # ระบุว่า service "node-server" จะเริ่มต้นหลังจาก "postgres" พร้อมใช้งานแล้ว
     volumes:
-      - ./:/app
-      - /app/node_modules
-    command: npm run dev
-    restart: always
+      - ./:/app # map directory ปัจจุบันไปที่ /app ใน container
+      - /app/node_modules # ป้องกันไม่ให้ node_modules ถูกแชร์ระหว่าง host และ container
+    command: npm run dev # คำสั่งที่จะรันใน container เมื่อเริ่มต้น ใช้ในการรันเซิร์ฟเวอร์ในโหมด development
+    restart: always # ระบุว่า container ควร restart เสมอหากเกิดข้อผิดพลาด
     develop:
       watch:
         - action: sync
           path: ./backend
           target: /app
           ignore:
-            - node_modules/
+            - node_modules/ # ไม่ให้ sync โฟลเดอร์ node_modules
         - action: rebuild
-          path: package.json
-    platform: linux/x86_64
+          path: package.json # รีบิลด์โปรเจกต์เมื่อมีการเปลี่ยนแปลงในไฟล์ package.json
+    platform: linux/x86_64 # ระบุ platform ที่ใช้เป็น linux/x86_64
 
-  mysql:
-    image: mysql:latest
-    container_name: mysql
-    restart: always
+  postgres: # ชื่อ service ของ PostgreSQL
+    image: postgres:latest # ใช้ image ของ PostgreSQL เวอร์ชันล่าสุดจาก Docker Hub
+    container_name: postgres # ตั้งชื่อ container ว่า "postgres"
+    restart: always # ระบุว่า container ควร restart เสมอหากเกิดข้อผิดพลาด
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: transfer
+      POSTGRES_USER: root # ตั้งค่า username ของ PostgreSQL เป็น root
+      POSTGRES_PASSWORD: root # ตั้งค่ารหัสผ่านของ PostgreSQL เป็น root
+      POSTGRES_DB: transfer # ชื่อฐานข้อมูลที่ต้องการสร้างเมื่อเริ่มต้น
     ports:
-      - "3306:3306"
+      - "5432:5432" # map พอร์ต 5432 ของ container กับพอร์ต 5432 ของ host machine
     volumes:
-      - mysql-data:/var/lib/mysql
-      - .:/usr/src/app
+      - postgres-data:/var/lib/postgresql/data # เก็บข้อมูลของ PostgreSQL ไว้ใน volume ชื่อ postgres-data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "--silent"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 5s
+      test: ["CMD-SHELL", "pg_isready -U root"] # ตรวจสอบว่า PostgreSQL พร้อมใช้งานหรือไม่ โดยใช้คำสั่ง pg_isready
+      interval: 10s # ตรวจสอบสถานะทุกๆ 10 วินาที
+      retries: 5 # หากไม่สำเร็จ ให้ลองใหม่ 5 ครั้ง
+      start_period: 30s # เริ่มตรวจสอบหลังจากรอ 30 วินาที
+      timeout: 5s # กำหนด timeout ไว้ที่ 5 วินาทีต่อการตรวจสอบ
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    restart: always
+  pgadmin: # ชื่อ service ของ pgAdmin (GUI สำหรับจัดการ PostgreSQL)
+    image: dpage/pgadmin4 # ใช้ image ของ pgAdmin4 จาก Docker Hub
+    container_name: pgadmin # ตั้งชื่อ container ว่า "pgadmin"
+    restart: always # ระบุว่า container ควร restart เสมอหากเกิดข้อผิดพลาด
     ports:
-      - "8080:80"
+      - "8080:80" # map พอร์ต 80 ของ container กับพอร์ต 8080 ของ host machine
     environment:
-      PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: root
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com # ตั้งค่า email สำหรับเข้าใช้งาน pgAdmin
+      PGADMIN_DEFAULT_PASSWORD: root # ตั้งค่ารหัสผ่านสำหรับเข้าใช้งาน pgAdmin
     depends_on:
-      mysql:
-        condition: service_healthy
+      postgres:
+        condition: service_healthy # ระบุว่า service "pgadmin" จะเริ่มต้นหลังจาก "postgres" พร้อมใช้งานแล้ว
 
 volumes:
-    mysql-data:
+    postgres-data: # สร้าง volume ชื่อ postgres-data เพื่อเก็บข้อมูลของ PostgreSQL
