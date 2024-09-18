@@ -1,23 +1,31 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../store/actions/userActions';
 import logo from '../../assets/sis_th.png'
+import { Button } from "@material-tailwind/react";
 const login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     try {
       const res = await axios.post('http://localhost:5000/api/authenticate/login', {
         username,
         password,
       });
       if (res.status === 200) {
+        const userInfo = res.data.body;
         setMessage(res.data.message);
-        // navigate('/transfer');
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        dispatch(setUser(userInfo));
         if (res.data.body.type === "student") {
           navigate('/student');
         } else {
@@ -27,6 +35,8 @@ const login = () => {
     } catch (error) {
       setMessage('รหัสผ่านไม่ถูกต้อง');
       console.error('Error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,16 +76,19 @@ const login = () => {
               required
             />
           </div>
-          <button
+          <Button
             type="submit"
-            className="w-full bg-blue hover:bg-customBlue text-white  py-3 rounded-lg transition duration-300"
+            className="w-full bg-blue hover:bg-customBlue text-white  py-4 rounded-lg transition duration-300 flex justify-center items-center"
+            disabled={loading}
+            onClick={handleSubmit}
+            loading={loading} // ใช้ prop นี้เพื่อแสดงไอคอนหมุน
           >
-            เข้าสู่ระบบ
-          </button>
+            {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
+          </Button>
         </form>
         {message && <p className="mt-4 text-center text-white font-semibold">{message}</p>}
       </div>
-    </div>
+    </div >
 
   );
 };

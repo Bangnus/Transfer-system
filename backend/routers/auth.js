@@ -33,4 +33,18 @@ router.post('/login', (req, res, next) => {
     }
 })
 
+router.get('/user/:id', async (req, res) => {
+    try {
+        const { id } = req.params
+        const user = await prisma.Users.findMany({
+            where: {
+                id: Number(id)
+            }
+        })
+        res.json(user);
+    } catch (error) {
+        return res.status(200).json()
+    }
+})
+
 module.exports = router

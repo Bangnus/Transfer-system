@@ -81,15 +81,12 @@ passport.use(new LocalStrategy({
                         }
                     });
                 }
-
-
                 // คืนค่าผู้ใช้ใหม่ที่ถูกสร้าง
                 return cb(null, user, { message: 'Logged In Successfully' });
             }
 
             return cb(null, false, { message: 'Invalid username or password' });
         }
-
         // คืนค่าผู้ใช้ที่มีอยู่แล้ว
         return cb(null, user, { message: 'Logged In Successfully' });
 

@@ -29,6 +29,8 @@ app.get('/', async (req, res) => {
 app.use('/api/addcourse', require('./routers/student'));
 // addtransferCourse
 app.use('/api/addtransfer', require('./routers/transferCourse'));
+
+app.use('/api/authenticate', require('./routers/auth'));
 app.use('/api/authenticate', require('./routers/auth'));
 
 readdirSync('./routers').map((r) => app.use('/api/v1', passport.authenticate('jwt', {session: false}), require('./routers/' +  r)));
