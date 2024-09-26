@@ -1,8 +1,9 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import { clearUser } from '../../store/actions/userActions';
+import { clearToken } from '../../store/actions/authActions';
 // image
 import logonav from '../../assets/sisruts_logonav.png'
 import iconuser from '../../assets/icon_user.png'
@@ -13,6 +14,7 @@ const navbar = ({ username }) => {
 
   const handleLogout = () => {
     dispatch(clearUser());
+    dispatch(clearToken());
     localStorage.removeItem('user');
     navigate('/'); // เปลี่ยนเส้นทางไปที่หน้า login หรือหน้าแรกหลังจาก logout
   };
@@ -21,13 +23,15 @@ const navbar = ({ username }) => {
       <div className='py-[12px] bg-customBlue text-white'>
         <div className="flex justify-between mx-5">
           <div className="">
-            <img className='w-[100px] ' src={logonav} alt="" />
+            <Link to="/student">
+              <img className='w-[100px] ' src={logonav} alt="" />
+            </Link>
           </div>
-            <button onClick={handleLogout} className="text-white uppercase text-[14px] flex gap-1 items-center hover:opacity-50">
-              <img className='w-[20px]' src={iconuser} alt="" />
-              {username}
-              <img className='w-[20px]' src={iconslogout} alt="" />
-            </button>
+          <button onClick={handleLogout} className="text-white uppercase text-[14px] flex gap-1 items-center hover:opacity-50">
+            <img className='w-[20px]' src={iconuser} alt="" />
+            {username}
+            <img className='w-[20px]' src={iconslogout} alt="" />
+          </button>
         </div>
       </div >
     </>

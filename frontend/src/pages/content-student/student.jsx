@@ -2,33 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Navbar from '../../components/connent-navbar/navbar'
+import { useNavigate, Link } from 'react-router-dom';
+import Iconenroll from '../../assets/icon_enroll3_y.png';
+import Icontranfer from '../../assets/icon_transfer2_y.png';
 
 const StudentPage = () => {
   const [error, setError] = useState('');
   const user = useSelector((state) => state.user.user);
+  const token = useSelector((state) => state.auth.token);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user && user.type === 'student') {
-      axios.get(`http://localhost:5000/api/authenticate/user/${user.id}`)
-        .catch(error => setError('Failed to fetch user data'));
+    const storedUser = JSON.parse(localStorage.getItem('user')); // ดึงข้อมูลผู้ใช้จาก localStorage
+    if (!storedUser) {
+      navigate('/'); // ถ้าไม่มีข้อมูลผู้ใช้ให้นำทางไปที่หน้า login
     }
-  }, [user]);
-  // console.log(user)
-
+  }, [user, navigate]);
   return (
     <>
       <Navbar username={user?.username} />
-      <div className="p-8">
-        {error && <p className="text-red-500">{error}</p>}
-        {user ? (
-          <div>
-            <h1>Welcome, {user.name}</h1>
-            <p>Details: {user.secname}</p>
-            {/* Add more user-specific details here */}
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
+      <div className="flex">
+        <Link to="/tranfer">
+          <img src={Icontranfer} alt="Icon transfer" className='w-32' />
+        </Link>
+        <img src={Iconenroll} alt="Icon enroll" className='w-32' />
       </div>
     </>
 

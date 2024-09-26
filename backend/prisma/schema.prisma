@@ -56,14 +56,18 @@ model StudentCourse {
   user        Users @relation(fields: [usernameId], references: [username])
 }
 
-// วิชาที่อาจารย์เพิ่มเพื่อใช้ในการเทียบโอน
+// วิชาที่ใช้ในการเทียบโอน
 model TransferCourse {
   id          Int    @id @default(autoincrement())
   courseCode  String
-  courseName  String
+  courseNameTH  String
+  courseNameENG  String
+  prerequisiteTH String
+  prerequisiteENG String
   credit      String
   gpa         String
-  description String
+  descriptionTH String
+  descriptionENG String
   // courseTransfersOld CourseTransfer[] @relation("OldCourse")
   // courseTransfersNew CourseTransfer[] @relation("NewCourse")
 }

@@ -73,7 +73,7 @@ router.put('/editcourse/:id', async (req, res) => {
         });
         res.json(editcourse)
     } catch (error) {
-        consol.error(error)
+        console.error(error)
         res.status(500).json({ error })
     }
 });
