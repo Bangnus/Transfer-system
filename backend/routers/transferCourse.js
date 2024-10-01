@@ -7,14 +7,29 @@ const prisma = new PrismaClient();
 //post
 router.post('/addtransferCourse', async (req, res) => {
     try {
-        const { courseCode, courseName, credit, gpa, description } = req.body;
+        const {
+            courseCode,
+            courseNameTH,
+            courseNameENG,
+            prerequisiteTH,
+            prerequisiteENG,
+            credit,
+            gpa,
+            descriptionTH,
+            descriptionENG,
+        } = req.body;
         const addtransferCourse = await prisma.TransferCourse.create({
             data: {
                 courseCode,
-                courseName,
+                courseNameTH,
+                courseNameENG,
+                prerequisiteTH,
+                prerequisiteENG,
                 credit,
                 gpa,
-                description
+                descriptionTH,
+                descriptionENG,
+                courseTransfers
             },
         });
         res.json(addtransferCourse);

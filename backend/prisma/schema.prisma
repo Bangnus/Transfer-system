@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"] // สำหรับ Docker Run หรือ Linux
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -23,15 +23,14 @@ model Users {
   seccode        String?
   secname        String?
   email          String?
-  studentCourses StudentCourse[] // วิชาที่นักศึกษาเพิ่มเอง
-  // courseTransfers CourseTransfer[] // ความสัมพันธ์ one-to-many กับ CourseTransfer
+  studentCourses StudentCourse[]
 }
 
 model Faculties {
   id          Int           @id @default(autoincrement())
   faccode     String        @unique
   facname     String
-  departments Departments[] // ความสัมพันธ์ one-to-many กับ Departments
+  departments Departments[]
 }
 
 model Departments {
@@ -46,43 +45,103 @@ model Departments {
 
 // วิชาที่นักศึกษาเพิ่มเอง
 model StudentCourse {
-  id          Int    @id @default(autoincrement())
-  courseCode  String
-  courseName  String
-  credit      String
-  gpa         String
-  description String
-  usernameId  String
-  user        Users @relation(fields: [usernameId], references: [username])
+  id              Int              @id @default(autoincrement())
+  courseCode      String
+  courseName      String
+  credit          Int
+  gpa             Float?
+  description     String?
+  usernameId      String
+  user            Users            @relation(fields: [usernameId], references: [username])
+  courseTransfers CourseTransfer[]
+}
+
+// กลุ่มเรียนเฉพาะ
+model SpecialGroup {
+  id                     Int                   @id @default(autoincrement())
+  name                   String
+  SpecialCategoryID      String
+  SpecialCategory        SpecialCategory       @relation(fields: [SpecialCategoryID], references: [categoryID])
+  SpecialCourse          SpecialCourse[]
+  SubSpecialtyCategory   SubSpecialtyCategory? @relation(fields: [SubSpecialtyCategoryID], references: [SubSpecialtyCategoryID])
+  SubSpecialtyCategoryID Int?
+}
+
+// หมวดวิชาเฉพาะ
+model SpecialCategory {
+  id           Int            @id @default(autoincrement())
+  name         String
+  categoryID   String         @unique
+  SpecialGroup SpecialGroup[]
+}
+
+// หมวดวิชาเฉพาะย่อย
+model SubSpecialtyCategory {
+  id                     Int            @id @default(autoincrement())
+  name                   String
+  SubSpecialtyCategoryID Int            @unique
+  SpecialGroup           SpecialGroup[]
+}
+
+// วิชาเฉพาะ
+model SpecialCourse {
+  id             Int          @id @default(autoincrement())
+  code           String
+  nameTH         String
+  credit         Int
+  SpecialGroup   SpecialGroup @relation(fields: [SpecialGroupID], references: [id])
+  SpecialGroupID Int
 }
 
 // วิชาที่ใช้ในการเทียบโอน
 model TransferCourse {
-  id          Int    @id @default(autoincrement())
-  courseCode  String
-  courseNameTH  String
-  courseNameENG  String
-  prerequisiteTH String
-  prerequisiteENG String
-  credit      String
-  gpa         String
-  descriptionTH String
-  descriptionENG String
-  // courseTransfersOld CourseTransfer[] @relation("OldCourse")
-  // courseTransfersNew CourseTransfer[] @relation("NewCourse")
+  id              Int              @id @default(autoincrement())
+  courseCode      String
+  courseNameTH    String
+  courseNameENG   String
+  prerequisiteTH  String?
+  prerequisiteENG String?
+  credit          Int
+  gpa             Float?
+  descriptionTH   String?
+  descriptionENG  String?
+  courseTransfers CourseTransfer[]
 }
 
-// model CourseTransfer {
-//   id           Int            @id @default(autoincrement())
-//   oldCourseId  Int
-//   newCourseId  Int
-//   username    Int
-//   status       String
-//   requestDate  DateTime
-//   approvalDate DateTime?
-//   reason       String?
-//   reviewer     String
-//   user         Users          @relation(fields: [username], references: [id])
-//   oldCourse    TransferCourse @relation("OldCourse", fields: [oldCourseId], references: [id])
-//   newCourse    TransferCourse @relation("NewCourse", fields: [newCourseId], references: [id])
-// }
+// หมวดวิชา
+model SubjectCategory {
+  id     Int     @id @default(autoincrement())
+  name   String
+  groups Group[]
+}
+
+// กลุ่มวิชา
+model Group {
+  id                Int             @id @default(autoincrement())
+  name              String
+  subjectCategoryId Int
+  subjectCategory   SubjectCategory @relation(fields: [subjectCategoryId], references: [id])
+  courses           Course[]
+}
+
+// วิชา
+model Course {
+  id      Int    @id @default(autoincrement())
+  code    String
+  nameTH  String
+  credit  Int
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId Int
+}
+
+// การเทียบโอนวิชา
+model CourseTransfer {
+  id               Int            @id @default(autoincrement())
+  studentCourseId  Int
+  transferCourseId Int
+  student          StudentCourse  @relation(fields: [studentCourseId], references: [id])
+  transferCourse   TransferCourse @relation(fields: [transferCourseId], references: [id])
+  description      String?
+  status           String // สถานะ เช่น "pending", "approved", "rejected"
+  dateSubmitted    DateTime       @default(now()) // วันที่ส่งคำร้อง
+}

@@ -12,7 +12,7 @@ const PublicRoute = ({ children}) => {
 
   // ถ้าผู้ใช้ล็อกอินอยู่ ให้เปลี่ยนไปยังหน้า dashboard ตามประเภทของผู้ใช้
   if (user) {
-    return <Navigate to={user.type === 'student' ? '/student' : '/personnel'} />;
+    return <Navigate to={user.type === 'student' ? '/home' : '/personnel'} />;
   }
 
   // ถ้าไม่ได้ล็อกอิน ให้แสดง children (เช่น หน้า login)

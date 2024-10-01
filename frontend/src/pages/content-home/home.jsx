@@ -6,10 +6,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import Iconenroll from '../../assets/icon_enroll3_y.png';
 import Icontranfer from '../../assets/icon_transfer2_y.png';
 
-const StudentPage = () => {
+const Home = () => {
   const [error, setError] = useState('');
   const user = useSelector((state) => state.user.user);
-  const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const StudentPage = () => {
   }, [user, navigate]);
   return (
     <>
-      <Navbar username={user?.username} />
+      <Navbar/>
       <div className="flex">
         <Link to="/tranfer">
           <img src={Icontranfer} alt="Icon transfer" className='w-32' />
@@ -32,4 +31,4 @@ const StudentPage = () => {
   );
 };
 
-export default StudentPage;
+export default Home;

@@ -26,7 +26,7 @@ app.get('/', async (req, res) => {
     }
 });
 // addCourseStudent
-app.use('/api/addcourse', require('./routers/student'));
+app.use('/api/addcourse', require('./routers/studentCourse'));
 // addtransferCourse
 app.use('/api/addtransfer', require('./routers/transferCourse'));
 

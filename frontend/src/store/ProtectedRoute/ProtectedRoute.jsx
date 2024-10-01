@@ -17,7 +17,7 @@ const ProtectedRoute = ({ children,allowedTypes  }) => {
     }
     // ถ้าประเภทของผู้ใช้ไม่อยู่ใน allowedTypes ให้นำทางไปที่หน้าอื่น (เช่น หน้า student หรือ personnel)
     if (!allowedTypes.includes(user.type)) {
-        return <Navigate to={user.type === 'student' ? '/student' : '/personnel'} />;
+        return <Navigate to={user.type === 'student' ? '/home' : '/personnel'} />;
     }
     // ถ้าล็อกอินแล้ว ให้แสดง children ที่เป็นหน้าที่ต้องการเข้าถึง
     return children;
