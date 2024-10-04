@@ -34,13 +34,14 @@ model Faculties {
 }
 
 model Departments {
-  id      Int       @id @default(autoincrement())
-  depcode String    @unique
-  depname String
-  seccode String    @unique
-  secname String
-  faccode String
-  faculty Faculties @relation(fields: [faccode], references: [faccode])
+  id           Int            @id @default(autoincrement())
+  depcode      String         @unique
+  depname      String
+  seccode      String         @unique
+  secname      String
+  faccode      String
+  faculty      Faculties      @relation(fields: [faccode], references: [faccode])
+  SpecialGroup SpecialGroup[]
 }
 
 // วิชาที่นักศึกษาเพิ่มเอง
@@ -58,61 +59,40 @@ model StudentCourse {
 
 // กลุ่มเรียนเฉพาะ
 model SpecialGroup {
-  id                     Int                   @id @default(autoincrement())
-  name                   String
-  SpecialCategoryID      String
-  SpecialCategory        SpecialCategory       @relation(fields: [SpecialCategoryID], references: [categoryID])
-  SpecialCourse          SpecialCourse[]
-  SubSpecialtyCategory   SubSpecialtyCategory? @relation(fields: [SubSpecialtyCategoryID], references: [SubSpecialtyCategoryID])
-  SubSpecialtyCategoryID Int?
+  id                Int                 @id @default(autoincrement())
+  name              String
+  SubjectCategoryID Int
+  SubjectCategory   SubjectCategory     @relation(fields: [SubjectCategoryID], references: [id])
+  SubSpecialtyGroup SubSpecialtyGroup[]
+  departmentID      Int
+  Departments       Departments         @relation(fields: [departmentID], references: [id])
 }
 
-// หมวดวิชาเฉพาะ
-model SpecialCategory {
-  id           Int            @id @default(autoincrement())
-  name         String
-  categoryID   String         @unique
-  SpecialGroup SpecialGroup[]
-}
-
-// หมวดวิชาเฉพาะย่อย
-model SubSpecialtyCategory {
-  id                     Int            @id @default(autoincrement())
-  name                   String
-  SubSpecialtyCategoryID Int            @unique
-  SpecialGroup           SpecialGroup[]
+// กลุ่มวิชาเฉพาะย่อย
+model SubSpecialtyGroup {
+  id             Int             @id @default(autoincrement())
+  name           String
+  SpecialGroup   SpecialGroup?   @relation(fields: [SpecialGroupID], references: [id])
+  SpecialGroupID Int?
+  SpecialCourse  SpecialCourse[]
 }
 
 // วิชาเฉพาะ
 model SpecialCourse {
-  id             Int          @id @default(autoincrement())
-  code           String
-  nameTH         String
-  credit         Int
-  SpecialGroup   SpecialGroup @relation(fields: [SpecialGroupID], references: [id])
-  SpecialGroupID Int
-}
-
-// วิชาที่ใช้ในการเทียบโอน
-model TransferCourse {
-  id              Int              @id @default(autoincrement())
-  courseCode      String
-  courseNameTH    String
-  courseNameENG   String
-  prerequisiteTH  String?
-  prerequisiteENG String?
-  credit          Int
-  gpa             Float?
-  descriptionTH   String?
-  descriptionENG  String?
-  courseTransfers CourseTransfer[]
+  id                  Int                @id @default(autoincrement())
+  code                String
+  nameTH              String
+  credit              Int
+  SubSpecialtyGroup   SubSpecialtyGroup? @relation(fields: [SubSpecialtyGroupID], references: [id])
+  SubSpecialtyGroupID Int?
 }
 
 // หมวดวิชา
 model SubjectCategory {
-  id     Int     @id @default(autoincrement())
-  name   String
-  groups Group[]
+  id           Int            @id @default(autoincrement())
+  name         String
+  groups       Group[]
+  SpecialGroup SpecialGroup[]
 }
 
 // กลุ่มวิชา
@@ -126,22 +106,34 @@ model Group {
 
 // วิชา
 model Course {
-  id      Int    @id @default(autoincrement())
-  code    String
-  nameTH  String
-  credit  Int
-  group   Group  @relation(fields: [groupId], references: [id])
-  groupId Int
+  id              Int              @id @default(autoincrement())
+  courseCode      String
+  courseNameTH    String
+  courseNameENG   String
+  prerequisiteTH  String?
+  prerequisiteENG String?
+  credit          Int
+  descriptionTH   String? @db.Text
+  descriptionENG  String? @db.Text
+  courseTransfers CourseTransfer[]
+  group           Group            @relation(fields: [groupId], references: [id])
+  groupId         Int
 }
 
 // การเทียบโอนวิชา
 model CourseTransfer {
-  id               Int            @id @default(autoincrement())
-  studentCourseId  Int
-  transferCourseId Int
-  student          StudentCourse  @relation(fields: [studentCourseId], references: [id])
-  transferCourse   TransferCourse @relation(fields: [transferCourseId], references: [id])
-  description      String?
-  status           String // สถานะ เช่น "pending", "approved", "rejected"
-  dateSubmitted    DateTime       @default(now()) // วันที่ส่งคำร้อง
+  id                  Int            @id @default(autoincrement())
+  originalCourseId    Int
+  transferredCourseId Int
+  student             StudentCourse  @relation(fields: [originalCourseId], references: [id])
+  Course              Course         @relation(fields: [transferredCourseId], references: [id])
+  description         String?
+  status              TransferStatus @default(PENDING)
+  dateSubmitted       DateTime       @default(now()) // วันที่ส่งคำร้อง
+}
+
+enum TransferStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

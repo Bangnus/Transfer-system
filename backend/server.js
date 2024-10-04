@@ -19,12 +19,15 @@ app.get('/', async (req, res) => {
     try {
         return res.status(200).json({ message: 'Welcome to Node.js and Express API!' });
     } catch (error) {
-        return res.status(500).json({ 
-            message: 'Server Error', 
-            error: error.message 
+        return res.status(500).json({
+            message: 'Server Error',
+            error: error.message
         });
     }
 });
+app.use('/api/subject', require('./routers/Subjects'));
+// SpecialSubjects
+app.use('/api/addsubSpecial', require('./routers/SpecialSubjects'));
 // addCourseStudent
 app.use('/api/addcourse', require('./routers/studentCourse'));
 // addtransferCourse
@@ -33,7 +36,7 @@ app.use('/api/addtransfer', require('./routers/transferCourse'));
 app.use('/api/authenticate', require('./routers/auth'));
 app.use('/api/authenticate', require('./routers/auth'));
 
-readdirSync('./routers').map((r) => app.use('/api/v1', passport.authenticate('jwt', {session: false}), require('./routers/' +  r)));
+readdirSync('./routers').map((r) => app.use('/api/v1', passport.authenticate('jwt', { session: false }), require('./routers/' + r)));
 
 console.log(readdirSync('./routers'))
 // เริ่มต้นเซิร์ฟเวอร์
