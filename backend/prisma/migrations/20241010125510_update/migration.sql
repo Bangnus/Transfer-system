@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "SpecialCourse" ALTER COLUMN "credit" DROP NOT NULL,
+ALTER COLUMN "credit" SET DATA TYPE TEXT;

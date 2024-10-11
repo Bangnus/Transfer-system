@@ -1,4 +1,3 @@
-import { Button } from '@material-tailwind/react'
 import PropTypes from 'prop-types'
 
 const ButtonComponent = ({ label, icons }) => {

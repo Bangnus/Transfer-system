@@ -1,9 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Login from './pages/content-login/login.jsx';
 import Home from './pages/content-home/home.jsx';
-import Personnel from './pages/personnel.jsx';
+import Personnel from './pages/content-personnel/personnel.jsx';
 import Tranfer from './pages/content-transfer/tranfer.jsx'
 import Addcourse from './pages/content-addcourse/addcourse.jsx'
+import Addspecialgroup from './pages/connent-subspecialtygroup/subspecialtygroup.jsx'
 
 import ProtectedRoute from './store/ProtectedRoute/ProtectedRoute';
 import PublicRoute from './store/PublicRoute/PublicRoute.jsx';
@@ -36,16 +37,24 @@ const router = createBrowserRouter([
   {
     path: '/tranfer',
     element: (
-      <ProtectedRoute allowedTypes={['student']}>  
-        <Tranfer/>
+      <ProtectedRoute allowedTypes={['student']}>
+        <Tranfer />
       </ProtectedRoute>
     ),
   },
   {
     path: '/addcourse',
     element: (
-      <ProtectedRoute allowedTypes={['student']}>  
-        <Addcourse/>
+      <ProtectedRoute allowedTypes={['student']}>
+        <Addcourse />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/addspecialgroup',
+    element: (
+      <ProtectedRoute allowedTypes={['personnel']}>
+        <Addspecialgroup />
       </ProtectedRoute>
     ),
   },

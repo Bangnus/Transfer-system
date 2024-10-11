@@ -1,23 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Navbar from '../../components/connent-navbar/navbar';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchCourses } from '../../store/actions/courseActions';
+import Generalcourse from './connent-generalcourse/generalcourse';
+import Specialcourse from './content-specialcourse/specialcourse';
 
 const AddCourse = () => {
-  const { data: courses = [], loading, error } = useSelector((state) => state.courses);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchCourses());
-  }, [dispatch]);
-
-  if (loading) return <p>Loading courses...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
-    <div>
-      <Navbar />
-    </div>
+    <>
+      <div>
+        <Navbar />
+      </div>
+
+      <div className="flex m-5">
+        <div className="w-1/2">
+          <Generalcourse />
+        </div>
+
+        <div className="w-1/2">
+          <Specialcourse />
+        </div>
+      </div>
+    </>
   );
 };
 

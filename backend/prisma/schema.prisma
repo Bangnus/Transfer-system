@@ -19,7 +19,7 @@ model Users {
   faccode        String?
   facname        String?
   depcode        String?
-  depname        String?
+  depname        String?         
   seccode        String?
   secname        String?
   email          String?
@@ -34,24 +34,26 @@ model Faculties {
 }
 
 model Departments {
-  id           Int            @id @default(autoincrement())
-  depcode      String         @unique
-  depname      String
-  seccode      String         @unique
-  secname      String
-  faccode      String
-  faculty      Faculties      @relation(fields: [faccode], references: [faccode])
-  SpecialGroup SpecialGroup[]
+  id      Int       @id @default(autoincrement())
+  depcode String    @unique
+  depname String
+  seccode String    @unique
+  secname String
+  faccode String
+  faculty Faculties @relation(fields: [faccode], references: [faccode])
 }
 
 // วิชาที่นักศึกษาเพิ่มเอง
 model StudentCourse {
   id              Int              @id @default(autoincrement())
   courseCode      String
-  courseName      String
+  courseNameTH    String
+  courseNameENG   String
+  prerequisiteTH  String?
+  prerequisiteENG String?
   credit          Int
-  gpa             Float?
-  description     String?
+  descriptionTH   String?          @db.Text
+  descriptionENG  String?          @db.Text
   usernameId      String
   user            Users            @relation(fields: [usernameId], references: [username])
   courseTransfers CourseTransfer[]
@@ -63,9 +65,8 @@ model SpecialGroup {
   name              String
   SubjectCategoryID Int
   SubjectCategory   SubjectCategory     @relation(fields: [SubjectCategoryID], references: [id])
+  secname           String?
   SubSpecialtyGroup SubSpecialtyGroup[]
-  departmentID      Int
-  Departments       Departments         @relation(fields: [departmentID], references: [id])
 }
 
 // กลุ่มวิชาเฉพาะย่อย
@@ -80,9 +81,14 @@ model SubSpecialtyGroup {
 // วิชาเฉพาะ
 model SpecialCourse {
   id                  Int                @id @default(autoincrement())
-  code                String
-  nameTH              String
-  credit              Int
+  courseCode          String
+  courseNameTH        String
+  courseNameENG       String
+  prerequisiteTH      String?
+  prerequisiteENG     String?
+  credit              String?
+  descriptionTH       String?            @db.Text
+  descriptionENG      String?            @db.Text
   SubSpecialtyGroup   SubSpecialtyGroup? @relation(fields: [SubSpecialtyGroupID], references: [id])
   SubSpecialtyGroupID Int?
 }
@@ -113,8 +119,8 @@ model Course {
   prerequisiteTH  String?
   prerequisiteENG String?
   credit          Int
-  descriptionTH   String? @db.Text
-  descriptionENG  String? @db.Text
+  descriptionTH   String?          @db.Text
+  descriptionENG  String?          @db.Text
   courseTransfers CourseTransfer[]
   group           Group            @relation(fields: [groupId], references: [id])
   groupId         Int

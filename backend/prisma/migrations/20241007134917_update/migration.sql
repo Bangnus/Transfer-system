@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "TransferStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
+
 -- CreateTable
 CREATE TABLE "Users" (
     "id" SERIAL NOT NULL,
@@ -43,10 +46,13 @@ CREATE TABLE "Departments" (
 CREATE TABLE "StudentCourse" (
     "id" SERIAL NOT NULL,
     "courseCode" TEXT NOT NULL,
-    "courseName" TEXT NOT NULL,
+    "courseNameTH" TEXT NOT NULL,
+    "courseNameENG" TEXT NOT NULL,
+    "prerequisiteTH" TEXT,
+    "prerequisiteENG" TEXT,
     "credit" INTEGER NOT NULL,
-    "gpa" DOUBLE PRECISION,
-    "description" TEXT,
+    "descriptionTH" TEXT,
+    "descriptionENG" TEXT,
     "usernameId" TEXT NOT NULL,
 
     CONSTRAINT "StudentCourse_pkey" PRIMARY KEY ("id")
@@ -56,42 +62,23 @@ CREATE TABLE "StudentCourse" (
 CREATE TABLE "SpecialGroup" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "SpecialCategoryID" TEXT NOT NULL,
-    "SubSpecialtyCategoryID" INTEGER NOT NULL,
+    "SubjectCategoryID" INTEGER NOT NULL,
+    "secname" TEXT NOT NULL,
 
     CONSTRAINT "SpecialGroup_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "SpecialCategory" (
+CREATE TABLE "SubSpecialtyGroup" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "categoryID" TEXT NOT NULL,
+    "SpecialGroupID" INTEGER,
 
-    CONSTRAINT "SpecialCategory_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "SubSpecialtyCategory" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "SubSpecialtyCategory_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "SubSpecialtyGroup_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "SpecialCourse" (
-    "id" SERIAL NOT NULL,
-    "code" TEXT NOT NULL,
-    "nameTH" TEXT NOT NULL,
-    "credit" INTEGER NOT NULL,
-    "SpecialGroupID" INTEGER NOT NULL,
-
-    CONSTRAINT "SpecialCourse_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "TransferCourse" (
     "id" SERIAL NOT NULL,
     "courseCode" TEXT NOT NULL,
     "courseNameTH" TEXT NOT NULL,
@@ -99,11 +86,11 @@ CREATE TABLE "TransferCourse" (
     "prerequisiteTH" TEXT,
     "prerequisiteENG" TEXT,
     "credit" INTEGER NOT NULL,
-    "gpa" DOUBLE PRECISION,
     "descriptionTH" TEXT,
     "descriptionENG" TEXT,
+    "SubSpecialtyGroupID" INTEGER,
 
-    CONSTRAINT "TransferCourse_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "SpecialCourse_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -126,9 +113,14 @@ CREATE TABLE "Group" (
 -- CreateTable
 CREATE TABLE "Course" (
     "id" SERIAL NOT NULL,
-    "code" TEXT NOT NULL,
-    "nameTH" TEXT NOT NULL,
+    "courseCode" TEXT NOT NULL,
+    "courseNameTH" TEXT NOT NULL,
+    "courseNameENG" TEXT NOT NULL,
+    "prerequisiteTH" TEXT,
+    "prerequisiteENG" TEXT,
     "credit" INTEGER NOT NULL,
+    "descriptionTH" TEXT,
+    "descriptionENG" TEXT,
     "groupId" INTEGER NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
@@ -137,10 +129,10 @@ CREATE TABLE "Course" (
 -- CreateTable
 CREATE TABLE "CourseTransfer" (
     "id" SERIAL NOT NULL,
-    "studentCourseId" INTEGER NOT NULL,
-    "transferCourseId" INTEGER NOT NULL,
+    "originalCourseId" INTEGER NOT NULL,
+    "transferredCourseId" INTEGER NOT NULL,
     "description" TEXT,
-    "status" TEXT NOT NULL,
+    "status" "TransferStatus" NOT NULL DEFAULT 'PENDING',
     "dateSubmitted" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "CourseTransfer_pkey" PRIMARY KEY ("id")
@@ -153,6 +145,9 @@ CREATE UNIQUE INDEX "Users_cid_key" ON "Users"("cid");
 CREATE UNIQUE INDEX "Users_username_key" ON "Users"("username");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Users_depname_key" ON "Users"("depname");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Faculties_faccode_key" ON "Faculties"("faccode");
 
 -- CreateIndex
@@ -161,9 +156,6 @@ CREATE UNIQUE INDEX "Departments_depcode_key" ON "Departments"("depcode");
 -- CreateIndex
 CREATE UNIQUE INDEX "Departments_seccode_key" ON "Departments"("seccode");
 
--- CreateIndex
-CREATE UNIQUE INDEX "SpecialCategory_categoryID_key" ON "SpecialCategory"("categoryID");
-
 -- AddForeignKey
 ALTER TABLE "Departments" ADD CONSTRAINT "Departments_faccode_fkey" FOREIGN KEY ("faccode") REFERENCES "Faculties"("faccode") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -171,13 +163,13 @@ ALTER TABLE "Departments" ADD CONSTRAINT "Departments_faccode_fkey" FOREIGN KEY 
 ALTER TABLE "StudentCourse" ADD CONSTRAINT "StudentCourse_usernameId_fkey" FOREIGN KEY ("usernameId") REFERENCES "Users"("username") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SpecialGroup" ADD CONSTRAINT "SpecialGroup_SpecialCategoryID_fkey" FOREIGN KEY ("SpecialCategoryID") REFERENCES "SpecialCategory"("categoryID") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SpecialGroup" ADD CONSTRAINT "SpecialGroup_SubjectCategoryID_fkey" FOREIGN KEY ("SubjectCategoryID") REFERENCES "SubjectCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SpecialGroup" ADD CONSTRAINT "SpecialGroup_SubSpecialtyCategoryID_fkey" FOREIGN KEY ("SubSpecialtyCategoryID") REFERENCES "SubSpecialtyCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SubSpecialtyGroup" ADD CONSTRAINT "SubSpecialtyGroup_SpecialGroupID_fkey" FOREIGN KEY ("SpecialGroupID") REFERENCES "SpecialGroup"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SpecialCourse" ADD CONSTRAINT "SpecialCourse_SpecialGroupID_fkey" FOREIGN KEY ("SpecialGroupID") REFERENCES "SpecialGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SpecialCourse" ADD CONSTRAINT "SpecialCourse_SubSpecialtyGroupID_fkey" FOREIGN KEY ("SubSpecialtyGroupID") REFERENCES "SubSpecialtyGroup"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Group" ADD CONSTRAINT "Group_subjectCategoryId_fkey" FOREIGN KEY ("subjectCategoryId") REFERENCES "SubjectCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -186,7 +178,7 @@ ALTER TABLE "Group" ADD CONSTRAINT "Group_subjectCategoryId_fkey" FOREIGN KEY ("
 ALTER TABLE "Course" ADD CONSTRAINT "Course_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CourseTransfer" ADD CONSTRAINT "CourseTransfer_studentCourseId_fkey" FOREIGN KEY ("studentCourseId") REFERENCES "StudentCourse"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CourseTransfer" ADD CONSTRAINT "CourseTransfer_originalCourseId_fkey" FOREIGN KEY ("originalCourseId") REFERENCES "StudentCourse"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CourseTransfer" ADD CONSTRAINT "CourseTransfer_transferCourseId_fkey" FOREIGN KEY ("transferCourseId") REFERENCES "TransferCourse"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CourseTransfer" ADD CONSTRAINT "CourseTransfer_transferredCourseId_fkey" FOREIGN KEY ("transferredCourseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -14,22 +14,22 @@ router.post('/addtransferCourse', async (req, res) => {
             prerequisiteTH,
             prerequisiteENG,
             credit,
-            gpa,
             descriptionTH,
             descriptionENG,
+            groupId
         } = req.body;
-        const addtransferCourse = await prisma.TransferCourse.create({
+        const addtransferCourse = await prisma.Course.create({
             data: {
                 courseCode,
                 courseNameTH,
                 courseNameENG,
                 prerequisiteTH,
                 prerequisiteENG,
-                credit,
-                gpa,
+                credit: parseInt(credit),
                 descriptionTH,
                 descriptionENG,
-                courseTransfers
+                groupId,
+
             },
         });
         res.json(addtransferCourse);
@@ -42,7 +42,7 @@ router.post('/addtransferCourse', async (req, res) => {
 // get
 router.get('/transferCourse', async (req, res) => {
     try {
-        const transferCourse = await prisma.TransferCourse.findMany({
+        const transferCourse = await prisma.Course.findMany({
         })
         res.json(transferCourse)
     } catch (error) {
@@ -55,7 +55,7 @@ router.get('/transferCourse', async (req, res) => {
 router.get('/transferCourse/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const transferCourse = await prisma.TransferCourse.findMany({
+        const transferCourse = await prisma.Course.findMany({
             where: {
                 id: Number(id)
             }
@@ -71,15 +71,29 @@ router.get('/transferCourse/:id', async (req, res) => {
 router.put('/edittransferCourse/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { courseCode, courseName, credit, gpa, description } = req.body;
-        const edittransferCourse = await prisma.TransferCourse.update({
+        const {
+            courseCode,
+            courseNameTH,
+            courseNameENG,
+            prerequisiteTH,
+            prerequisiteENG,
+            credit,
+            descriptionTH,
+            descriptionENG,
+            groupId
+        } = req.body;
+        const edittransferCourse = await prisma.Course.update({
             where: { id: Number(id) },
             data: {
                 courseCode,
-                courseName,
-                credit,
-                gpa,
-                description
+                courseNameTH,
+                courseNameENG,
+                prerequisiteTH,
+                prerequisiteENG,
+                credit: parseInt(credit),
+                descriptionTH,
+                descriptionENG,
+                groupId,
             }
         });
         res.json(edittransferCourse)
