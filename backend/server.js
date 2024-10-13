@@ -26,6 +26,7 @@ app.get('/', async (req, res) => {
     }
 });
 
+
 app.use('/api/subject', require('./routers/Subjects'));
 // SpecialSubjects
 app.use('/api/addsubSpecial', require('./routers/SpecialSubjects'));
@@ -33,6 +34,10 @@ app.use('/api/addsubSpecial', require('./routers/SpecialSubjects'));
 app.use('/api/addcourse', require('./routers/studentCourse'));
 // addtransferCourse
 app.use('/api/addtransfer', require('./routers/transferCourse'));
+//coursefransfer
+app.use('/api/transsfer', require('./routers/CourseTransfer'));
+//notifications
+app.use('/api/notify', require('./routers/notification'))
 
 app.use('/api/authenticate', require('./routers/auth'));
 app.use('/api/authenticate', require('./routers/auth'));

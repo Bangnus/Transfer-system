@@ -35,18 +35,23 @@ router.get('/course/:id', async (req, res) => {
 // post
 router.post('/addcourse', async (req, res) => {
     try {
-        const { courseCode, courseName, credit, gpa, description, usernameId } = req.body;
-        const user = await prisma.Users.findFirst({
-            where: { username: usernameId }
-        })
+        const {
+            courseCode,
+            courseName,
+            credit,
+            grade,
+            description,
+            usernameId,
+        } = req.body;
+
         const newPost = await prisma.StudentCourse.create({
             data: {
                 courseCode,
                 courseName,
                 credit,
-                gpa,
+                grade,
                 description,
-                usernameId: user.username
+                usernameId,
             },
         })
         res.json(newPost);
@@ -60,14 +65,20 @@ router.post('/addcourse', async (req, res) => {
 router.put('/editcourse/:id', async (req, res) => {
     try {
         const { id } = req.params
-        const { courseCode, courseName, credit, gpa, description } = req.body;
+        const {
+            courseCode,
+            courseName,
+            credit,
+            grade,
+            description,
+        } = req.body;
         const editcourse = await prisma.StudentCourse.update({
             where: { id: Number(id) },
             data: {
                 courseCode,
                 courseName,
                 credit,
-                gpa,
+                grade,
                 description
             },
         });

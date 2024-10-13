@@ -9,21 +9,22 @@ datasource db {
 }
 
 model Users {
-  id             Int             @id @default(autoincrement())
-  cid            String?         @unique
-  username       String?         @unique
-  name           String?
-  firstname      String?
-  lastname       String?
-  type           String?
-  faccode        String?
-  facname        String?
-  depcode        String?
-  depname        String?         
-  seccode        String?
-  secname        String?
-  email          String?
-  studentCourses StudentCourse[]
+  id            Int             @id @default(autoincrement())
+  cid           String?         @unique
+  username      String?         @unique
+  name          String?
+  firstname     String?
+  lastname      String?
+  type          String?
+  faccode       String?
+  facname       String?
+  depcode       String?
+  depname       String?
+  seccode       String?
+  secname       String?
+  email         String?
+  StudentCourse StudentCourse[]
+  Notification  Notification[]
 }
 
 model Faculties {
@@ -47,16 +48,13 @@ model Departments {
 model StudentCourse {
   id              Int              @id @default(autoincrement())
   courseCode      String
-  courseNameTH    String
-  courseNameENG   String
-  prerequisiteTH  String?
-  prerequisiteENG String?
-  credit          Int
-  descriptionTH   String?          @db.Text
-  descriptionENG  String?          @db.Text
-  usernameId      String
-  user            Users            @relation(fields: [usernameId], references: [username])
+  courseName      String
+  credit          String?
+  grade           String?
+  description     String?          @db.Text
+  usernameId      String?
   courseTransfers CourseTransfer[]
+  user            Users?           @relation(fields: [usernameId], references: [username])
 }
 
 // กลุ่มเรียนเฉพาะ
@@ -91,6 +89,7 @@ model SpecialCourse {
   descriptionENG      String?            @db.Text
   SubSpecialtyGroup   SubSpecialtyGroup? @relation(fields: [SubSpecialtyGroupID], references: [id])
   SubSpecialtyGroupID Int?
+  CourseTransfer      CourseTransfer[]
 }
 
 // หมวดวิชา
@@ -128,18 +127,29 @@ model Course {
 
 // การเทียบโอนวิชา
 model CourseTransfer {
-  id                  Int            @id @default(autoincrement())
-  originalCourseId    Int
-  transferredCourseId Int
-  student             StudentCourse  @relation(fields: [originalCourseId], references: [id])
-  Course              Course         @relation(fields: [transferredCourseId], references: [id])
-  description         String?
-  status              TransferStatus @default(PENDING)
-  dateSubmitted       DateTime       @default(now()) // วันที่ส่งคำร้อง
+  id                         Int             @id @default(autoincrement())
+  originalCourseId           Int?
+  transferredCourseId        Int?
+  specialtransferredCourseId Int?
+  student                    StudentCourse?  @relation(fields: [originalCourseId], references: [id])
+  Course                     Course?         @relation(fields: [transferredCourseId], references: [id])
+  SpecialCourse              SpecialCourse?  @relation(fields: [specialtransferredCourseId], references: [id])
+  description                String?         @db.Text
+  status                     TransferStatus? @default(PENDING)
+  dateSubmitted              DateTime        @default(now()) // วันที่ส่งคำร้อง
 }
 
 enum TransferStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String?
+  isRead    Boolean  @default(false)
+  userId    String?
+  createdAt DateTime @default(now())
+  user      Users?   @relation(fields: [userId], references: [username])
 }

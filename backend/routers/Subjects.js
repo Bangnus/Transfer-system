@@ -52,4 +52,26 @@ router.get('/specialsubjectCategotyWithGroup', async (req, res) => {
     }
 })
 
+router.get('/coursetransfer', async (req, res) => {
+    try {
+        const { username } = req.query
+        const coursetransfer = await prisma.CourseTransfer.findMany({
+            where: {
+                student: {
+                    usernameId: username
+                }
+            },
+            include: {
+                student: true,
+                Course: true,
+                SpecialCourse: true,
+            }
+        })
+        res.json(coursetransfer)
+    } catch (error) {
+        console.error({ error: 'Get coursetransfer fail' })
+        res.status(500).json({ error: 'Get oursetransfer fail' })
+    }
+})
+
 module.exports = router;

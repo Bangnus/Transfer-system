@@ -3,8 +3,9 @@ import Login from './pages/content-login/login.jsx';
 import Home from './pages/content-home/home.jsx';
 import Personnel from './pages/content-personnel/personnel.jsx';
 import Tranfer from './pages/content-transfer/tranfer.jsx'
-import Addcourse from './pages/content-addcourse/addcourse.jsx'
+import Layoutcourse from './pages/content-addcourse/Layoutcourse.jsx'
 import Addspecialgroup from './pages/connent-subspecialtygroup/subspecialtygroup.jsx'
+import Addcourse from './pages/content-addcourse/addcourse.jsx'
 
 import ProtectedRoute from './store/ProtectedRoute/ProtectedRoute';
 import PublicRoute from './store/PublicRoute/PublicRoute.jsx';
@@ -39,6 +40,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedTypes={['student']}>
         <Tranfer />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/course',
+    element: (
+      <ProtectedRoute allowedTypes={['student']}>
+        <Layoutcourse />
       </ProtectedRoute>
     ),
   },
