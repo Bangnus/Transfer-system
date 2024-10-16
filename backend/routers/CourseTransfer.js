@@ -13,7 +13,7 @@ router.post('/coursetransfer', async (req, res) => {
                 originalCourseId,
                 transferredCourseId,
                 specialtransferredCourseId,
-                status: 'PENDING'
+                status: 'PENDING',
             }
         })
         res.json(addcoursetransfer)

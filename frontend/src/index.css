@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 @layer utilities {
-    .bg-blue{
-       background-color: #001C54;
+    .bg-blue {
+        background-color: #001C54;
     }
+}
+
+body {
+    background-color: #f3f4f6;
 }

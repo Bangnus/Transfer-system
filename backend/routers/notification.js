@@ -21,10 +21,9 @@ router.post('/notification', async (req, res) => {
 });
 
 router.get('/notifications', async (req, res) => {
-    const { username } = req.query;
     try {
         const notifications = await prisma.notification.findMany({
-            orderBy: { createAt: 'desc' },
+            orderBy: { createdAt: 'desc' },
         })
         res.json(notifications)
     } catch (error) {

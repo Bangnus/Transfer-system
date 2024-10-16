@@ -63,8 +63,13 @@ router.get('/coursetransfer', async (req, res) => {
             },
             include: {
                 student: true,
-                Course: true,
+                Course: {
+                    include: {
+                        group: true,
+                    }
+                },
                 SpecialCourse: true,
+
             }
         })
         res.json(coursetransfer)

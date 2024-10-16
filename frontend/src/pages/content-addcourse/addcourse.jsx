@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { addcoursetransfer, coursetransfer } from '../../store/actions/coursetransferActions';
 import Navbar from '../../components/connent-navbar/navbar'
+import axios from 'axios';
 const Addcourse = () => {
     const location = useLocation();
     const dispatch = useDispatch();
@@ -47,23 +48,39 @@ const Addcourse = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Dispatch เพื่อเพิ่มข้อมูล course ใหม่และเก็บ courseId ไว้
             const newCourseId = await dispatch(addcoursetransfer(formData));
             setFormcourseId(newCourseId);
 
-            // รอจน formcourseId ได้รับการอัพเดตแล้วจึงอัพเดต formCourseTransfer
             const updatedFormCourseTransfer = {
                 originalCourseId: newCourseId,
                 transferredCourseId: courseId,
                 specialtransferredCourseId: specialcourseId,
             };
-
             setFormCourseTransfer(updatedFormCourseTransfer);
 
-            // Dispatch coursetransfer หลังจากข้อมูล formCourseTransfer อัพเดตแล้ว
             await dispatch(coursetransfer(updatedFormCourseTransfer));
 
+            await axios.post('http://localhost:5000/api/notify/notification', {
+                username: user.username,
+                message: `ได้เพิ่มข้อมูลใหม่`
+            })
             navigate('/tranfer');
+
+            setFormCourseTransfer({
+                originalCourseId: null,
+                transferredCourseId: null,
+                specialtransferredCourseId: null
+            });
+
+            setFormData({
+                courseCode: '',
+                courseName: '',
+                credit: '',
+                grade: '',
+                description: '',
+                usernameId: null
+            });
+
         } catch (error) {
             console.error('Error adding course', error);
         }
@@ -74,6 +91,7 @@ const Addcourse = () => {
             <Navbar />
             {user?.username}
             <div>{courseId}</div>
+            <div >{specialcourseId}</div>
 
             <form onSubmit={handleSubmit}>
                 <div className="">
