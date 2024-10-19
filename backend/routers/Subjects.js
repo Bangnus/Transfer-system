@@ -68,7 +68,19 @@ router.get('/coursetransfer', async (req, res) => {
                         group: true,
                     }
                 },
-                SpecialCourse: true,
+                SpecialCourse: {
+                    include: {
+                        SubSpecialtyGroup: {
+                            include: {
+                                SpecialGroup: {
+                                    include: {
+                                        SubjectCategory: true
+                                    }
+                                },
+                            }
+                        }
+                    }
+                },
 
             }
         })

@@ -70,30 +70,58 @@ const Transfer = () => {
           ))}
         </tbody>
       </table>
+
       {selecteddetail && (
         <div className="bg-gray-500 ">
-          <div className="">รายละเอียด</div>
-          <div className="w-1/2">
-            {selecteddetail?.Course?.group?.name}
-            <div className="">
-              รหัสวิชา:
-              {selecteddetail?.Course?.courseCode || selecteddetail?.SpecialCourse?.courseCode}
+            <div className="text-center">รายละเอียด</div>
+          <div className="flex">
+            <div className="w-1/2 m-3">
+              <div className="">
+                {selecteddetail?.SpecialCourse?.SubSpecialtyGroup?.SpecialGroup?.SubjectCategory?.name}
+                {selecteddetail?.Course?.group?.name || selecteddetail?.SpecialCourse?.SubSpecialtyGroup?.SpecialGroup?.name}
+                {selecteddetail?.SpecialCourse?.SubSpecialtyGroup?.name}
+              </div>
+              <div className="">
+                รหัสวิชา:
+                {selecteddetail?.Course?.courseCode || selecteddetail?.SpecialCourse?.courseCode}
+              </div>
+              <div className="">
+                ชื่อวิชา:
+                {selecteddetail?.Course?.courseNameTH || selecteddetail?.SpecialCourse?.courseNameTH}
+              </div>
+              <div className="">
+                หน่วยกิต:
+                {selecteddetail?.Course?.credit || selecteddetail?.SpecialCourse?.credit}
+              </div>
+              <div className="">
+                คำอธิบายวิชา:
+                {selecteddetail?.Course?.descriptionTH || selecteddetail?.SpecialCourse?.descriptionTH}
+              </div>
             </div>
-            <div className="">
-              ชื่อวิชา:
-              {selecteddetail?.Course?.courseNameTH || selecteddetail?.SpecialCourse?.courseNameTH}
-            </div>
-            <div className="">
-              หน่วยกิต:
-              {selecteddetail?.Course?.credit || selecteddetail?.SpecialCourse?.credit}
-            </div>
-            <div className="">
-              คำอธิบายวิชา:
-              {selecteddetail?.Course?.descriptionTH || selecteddetail?.SpecialCourse?.descriptionTH}
+
+            <div className="w-1/2 m-3">
+              <div className="">
+                รหัสวิชา:
+                {selecteddetail?.student?.courseCode}
+              </div>
+              <div className="">
+                ชื่อวิชา:
+                {selecteddetail?.student?.courseName}
+              </div>
+              <div className="">
+                หน่วยกิต:
+                {selecteddetail?.student?.credit}
+              </div>
+              <div className="">
+                เกรด:
+                {selecteddetail?.student?.grade}
+              </div>
+              <div className="">
+                คำอธิบายวิชา:
+                {selecteddetail?.student?.description}
+              </div>
             </div>
           </div>
-
-          <div className="w-1/2"></div>
         </div>
       )}
     </div>
