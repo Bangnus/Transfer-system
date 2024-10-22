@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/connent-navbar/navbar';
-import { Button } from '@material-tailwind/react'
+import { Button } from '@material-tailwind/react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 const Transfer = () => {
-  const [selecteddetail, setSelecteddetail] = useState(null)
+  const [selecteddetail, setSelecteddetail] = useState(null);
   const user = useSelector((state) => state.user.user);
   const username = user?.username;
   const [data, setData] = useState([]);
 
   const opendetail = (transfer) => {
-    setSelecteddetail(transfer === selecteddetail ? null : transfer);
-  }
+    setSelecteddetail(transfer === selecteddetail ? null : transfer); // เปิด/ปิดข้อมูล
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,7 +42,7 @@ const Transfer = () => {
         </Button>
       </Link>
 
-      <table className="min-w-full">
+      <table className="min-w-full mt-4">
         <thead>
           <tr>
             <th className="px-6 py-3">รหัสวิชา</th>
@@ -53,77 +54,51 @@ const Transfer = () => {
         </thead>
         <tbody>
           {data?.map((transfer) => (
-            <tr key={transfer.id}>
-              <td className="px-6 py-4">{transfer.Course?.courseCode || transfer.SpecialCourse?.courseCode}</td>
-              <td className="px-6 py-4">{transfer.Course?.courseNameTH || transfer.SpecialCourse?.courseNameTH}</td>
-              <td className="px-6 py-4">{transfer.Course?.credit || transfer.SpecialCourse?.credit}</td>
-              <td className="px-6 py-4">{transfer.status}</td>
-              <td className="px-6 py-4">
-                <button
-                  onClick={() => opendetail(transfer)}
-                  className="bg-blue-500 text-white rounded-md px-2 py-1"
-                >
-                  รายละเอียด
-                </button>
-              </td>
-            </tr>
+            <React.Fragment key={transfer.id}>
+              <tr>
+                <td className="px-6 py-4">{transfer.Course?.courseCode || transfer.SpecialCourse?.courseCode}</td>
+                <td className="px-6 py-4">{transfer.Course?.courseNameTH || transfer.SpecialCourse?.courseNameTH}</td>
+                <td className="px-6 py-4">{transfer.Course?.credit || transfer.SpecialCourse?.credit}</td>
+                <td className="px-6 py-4">{transfer.status}</td>
+                <td className="px-6 py-4">
+                  <button
+                    onClick={() => opendetail(transfer)}
+                    className="bg-blue-500 text-white rounded-md px-2 py-1"
+                  >
+                    รายละเอียด
+                  </button>
+                </td>
+              </tr>
+
+              {/* แสดงข้อมูลเฉพาะแถวที่ถูกเลือก */}
+              {selecteddetail === transfer && (
+                <tr>
+                  <td colSpan="5" className="bg-gray-100 px-6 py-4">
+                    <div className="flex flex-col md:flex-row justify-between">
+                      <div className="w-full md:w-1/2 mb-4 md:mb-0 p-2">
+                        <h3 className="font-semibold">ข้อมูลวิชา</h3>
+                        <p>รหัสวิชา: {transfer?.Course?.courseCode || transfer?.SpecialCourse?.courseCode}</p>
+                        <p>ชื่อวิชา: {transfer?.Course?.courseNameTH || transfer?.SpecialCourse?.courseNameTH}</p>
+                        <p>หน่วยกิต: {transfer?.Course?.credit || transfer?.SpecialCourse?.credit}</p>
+                        <p>คำอธิบายวิชา: {transfer?.Course?.descriptionTH || transfer?.SpecialCourse?.descriptionTH}</p>
+                      </div>
+
+                      <div className="w-full md:w-1/2 p-2">
+                        <h3 className="font-semibold">ข้อมูลวิชาของนักศึกษา</h3>
+                        <p>รหัสวิชา: {transfer?.student?.courseCode}</p>
+                        <p>ชื่อวิชา: {transfer?.student?.courseName}</p>
+                        <p>หน่วยกิต: {transfer?.student?.credit}</p>
+                        <p>เกรด: {transfer?.student?.grade}</p>
+                        <p>คำอธิบายวิชา: {transfer?.student?.description}</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
           ))}
         </tbody>
       </table>
-
-      {selecteddetail && (
-        <div className="bg-gray-500 ">
-            <div className="text-center">รายละเอียด</div>
-          <div className="flex">
-            <div className="w-1/2 m-3">
-              <div className="">
-                {selecteddetail?.SpecialCourse?.SubSpecialtyGroup?.SpecialGroup?.SubjectCategory?.name}
-                {selecteddetail?.Course?.group?.name || selecteddetail?.SpecialCourse?.SubSpecialtyGroup?.SpecialGroup?.name}
-                {selecteddetail?.SpecialCourse?.SubSpecialtyGroup?.name}
-              </div>
-              <div className="">
-                รหัสวิชา:
-                {selecteddetail?.Course?.courseCode || selecteddetail?.SpecialCourse?.courseCode}
-              </div>
-              <div className="">
-                ชื่อวิชา:
-                {selecteddetail?.Course?.courseNameTH || selecteddetail?.SpecialCourse?.courseNameTH}
-              </div>
-              <div className="">
-                หน่วยกิต:
-                {selecteddetail?.Course?.credit || selecteddetail?.SpecialCourse?.credit}
-              </div>
-              <div className="">
-                คำอธิบายวิชา:
-                {selecteddetail?.Course?.descriptionTH || selecteddetail?.SpecialCourse?.descriptionTH}
-              </div>
-            </div>
-
-            <div className="w-1/2 m-3">
-              <div className="">
-                รหัสวิชา:
-                {selecteddetail?.student?.courseCode}
-              </div>
-              <div className="">
-                ชื่อวิชา:
-                {selecteddetail?.student?.courseName}
-              </div>
-              <div className="">
-                หน่วยกิต:
-                {selecteddetail?.student?.credit}
-              </div>
-              <div className="">
-                เกรด:
-                {selecteddetail?.student?.grade}
-              </div>
-              <div className="">
-                คำอธิบายวิชา:
-                {selecteddetail?.student?.description}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

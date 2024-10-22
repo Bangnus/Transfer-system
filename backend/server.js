@@ -26,7 +26,7 @@ app.get('/', async (req, res) => {
     }
 });
 
-
+app.use('/api/manage', require('./routers/ManageStd'))
 app.use('/api/subject', require('./routers/Subjects'));
 // SpecialSubjects
 app.use('/api/addsubSpecial', require('./routers/SpecialSubjects'));

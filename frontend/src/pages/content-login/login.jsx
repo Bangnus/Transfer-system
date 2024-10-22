@@ -37,7 +37,7 @@ const Login = () => {
       }
     } catch (error) {
       setMessage('รหัสผ่านไม่ถูกต้อง');
-      console.error('Error:', error);
+      console.error('Error Password fail:');
     } finally {
       setLoading(false);
     }
@@ -45,7 +45,7 @@ const Login = () => {
 
   return (
     <div className='h-screen flex items-center'>
-      <div className="bg-white-700 w-[600px] p-8 rounded shadow-lg mx-auto animate-fade-down animate-once animate-duration-1000">
+      <div className="bg-white w-[600px] p-8 rounded shadow-lg mx-auto animate-fade-down animate-once animate-duration-1000">
         <div className="flex justify mb-6">
           <img className="w-full h-full" src={logo} alt="Logo" />
         </div>

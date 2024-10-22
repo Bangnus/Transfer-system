@@ -39,7 +39,7 @@ const Generalcourse = () => {
                                                     ? 'bg-blue-600 text-white'
                                                     : 'bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white'}`}
                                         >
-                                            {index + 1}. {group.name}
+                                            <div className="px-3">   {index + 1}. {group.name} </div>
                                         </button>
 
                                         {selectedGroupId === group.id && group.courses && group.courses.length > 0 && (

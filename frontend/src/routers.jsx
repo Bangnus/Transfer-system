@@ -6,6 +6,7 @@ import Tranfer from './pages/content-transfer/tranfer.jsx'
 import Layoutcourse from './pages/content-addcourse/Layoutcourse.jsx'
 import Addspecialgroup from './pages/connent-subspecialtygroup/subspecialtygroup.jsx'
 import Addcourse from './pages/content-addcourse/addcourse.jsx'
+import DetailStudent from './pages/content-managecourse/detailstudent.jsx'
 
 import ProtectedRoute from './store/ProtectedRoute/ProtectedRoute';
 import PublicRoute from './store/PublicRoute/PublicRoute.jsx';
@@ -67,6 +68,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+    path: '/detail/:firstname',
+    element: (
+      <ProtectedRoute allowedTypes={['personnel']}>
+        <DetailStudent />
+      </ProtectedRoute>
+    ),
+  }
 ]);
 
 export default router;

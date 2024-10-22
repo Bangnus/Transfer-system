@@ -11,26 +11,22 @@ dayjs.extend(relativeTime);
 
 const personnel = () => {
   const [currenPage, setCurrenPage] = useState('dashboard');
-  const [notify, setNotify] = useState([]);
-  const [shownotify, setShownotify] = useState(false);
-  const user = useSelector((state) => state.user.user)
+  // const [notify, setNotify] = useState([]);
+  // const [shownotify, setShownotify] = useState(false);
 
-  useEffect(() => {
-    const fetchNotify = async () => {
-      try {
-        const res = await axios.get(`http://localhost:5000/api/notify/notifications`);
-        setNotify(res.data);
-      } catch (error) {
-        console.error('Error fetching notifications:', error);
-      }
-    }
-    if (user) {
-      fetchNotify()
-    }
-  }, [user])
+  // useEffect(() => {
+  //   const fetchNotify = async () => {
+  //     try {
+  //       const res = await axios.get(`http://localhost:5000/api/notify/notifications`);
+  //       setNotify(res.data);
+  //     } catch (error) {
+  //       console.error('Error fetching notifications:', error);
+  //     }
+  //   }
 
-  console.log(notify)
-  console.log(shownotify)
+  // }, [])
+
+
 
 
   const renderPage = () => {
@@ -45,20 +41,20 @@ const personnel = () => {
       <div>
         <Navnar />
       </div>
-
+    {/* Notify */}
       <div className="bg-blue-50 p-3 shadow-sm flex items-center ">
-        <div className="flex-grow"></div>
-        <div className="relative ">
-          <button onClick={() => setShownotify(!shownotify)} className='relative mr-5'>
+        {/* <div className="flex-grow"></div> */}
+        {/* <div className="relative "> */}
+        {/* <button onClick={() => setShownotify(!shownotify)} className='relative mr-5'>
             <BellIcon className=' w-6  text-customBlue ' />
             {notify.length > 0 && (
               <span className='absolute -top-1 -right-1 bg-red-500 text-white rounded-full px-1 text-xs'>
                 {notify.length}
               </span>
             )}
-          </button>
+          </button> */}
 
-          {shownotify && notify.length > 0 && (
+        {/* {shownotify && notify.length > 0 && (
             <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 shadow-lg z-10">
               <div className="p-2 font-bold text-gray-700">Notifications</div>
               <ul>
@@ -74,8 +70,8 @@ const personnel = () => {
                 ))}
               </ul>
             </div>
-          )}
-        </div>
+          )} */}
+        {/* </div> */}
       </div>
 
       <div className="mt-2">
