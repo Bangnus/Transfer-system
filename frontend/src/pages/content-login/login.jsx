@@ -25,19 +25,24 @@ const Login = () => {
       if (res.status === 200) {
         const userInfo = res.data.body;
         console.log(userInfo);
-        setMessage(res.data.message);
-        localStorage.setItem('user', JSON.stringify(userInfo)); // เก็บข้อมูลผู้ใช้ใน localStorage
-        dispatch(setUser(userInfo));
+        // setMessage(res.data.message);
+        if (userInfo.type === "student" || userInfo.type === "staff") {
+          localStorage.setItem('user', JSON.stringify(userInfo)); // เก็บข้อมูลผู้ใช้ใน localStorage
+          dispatch(setUser(userInfo));
+        }
 
         if (userInfo.type === "student") {
           navigate('/home');
+        } else if (userInfo.type === "staff") {
+          navigate('/personnel')
         } else {
-          navigate('/personnel');
+          setMessage('คุณไม่สามารถเข้าได้')
+          navigate('/')
         }
+
       }
     } catch (error) {
       setMessage('รหัสผ่านไม่ถูกต้อง');
-      console.error('Error Password fail:');
     } finally {
       setLoading(false);
     }
@@ -81,7 +86,7 @@ const Login = () => {
           <Button
             type="submit"
             className="w-full bg-blue hover:bg-customBlue text-white py-4 rounded-lg transition duration-300 flex justify-center items-center"
-            disabled={loading} 
+            disabled={loading}
           >
             {loading ? (
               <>

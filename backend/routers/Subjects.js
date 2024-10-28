@@ -23,7 +23,7 @@ router.get('/subjectCategoryWithGroups', async (req, res) => {
         res.json(generalEducationCategory)
     } catch (error) {
         console.error(error);
-        res.json(500).json({ error: 'Error fetching subject categories with groups.' })
+        res.status(500).json({ error: 'Error fetching subject categories with groups.' })
     }
 });
 
@@ -88,6 +88,57 @@ router.get('/coursetransfer', async (req, res) => {
     } catch (error) {
         console.error({ error: 'Get coursetransfer fail' })
         res.status(500).json({ error: 'Get oursetransfer fail' })
+    }
+})
+router.put('/coursetransfer/:id', async (req, res) => {
+    const { id } = req.params
+    const { courseCode, courseName, credit, grade, description } = req.body
+    try {
+        const coursetransfer = await prisma.StudentCourse.update({
+            where: {
+                id: parseInt(id)
+            },
+            data: {
+                courseCode,
+                courseName,
+                credit,
+                grade,
+                description
+            }
+        })
+        res.json(coursetransfer)
+    } catch (error) {
+        console.error({ error: 'Error Update Course' })
+        res.status(500).json({ error: 'Error Update Course' })
+    }
+})
+
+router.get('/coursetransfer/:id', async (req, res) => {
+    const { id } = req.params
+    try {
+        const coursetransfer = await prisma.StudentCourse.findUnique({
+            where: {
+                id: parseInt(id)
+            },
+        })
+        res.json(coursetransfer)
+    } catch (error) {
+        console.error({ error: 'Error Update Course' })
+        res.status(500).json({ error: 'Error Update Course' })
+    }
+})
+
+router.delete('/coursetransfer/:id', async (req, res) => {
+    const { id } = req.params
+    try{
+        const deletecourse = await prisma.StudentCourse.delete({
+            where: {
+                id: parseInt(id),
+            },
+        })
+        res.json(deletecourse)
+    }catch (error) {
+        res.status(500).json('Failed To  Delete Course', error)
     }
 })
 

@@ -19,13 +19,16 @@ const Home = () => {
   }, [user, navigate]);
   return (
     <>
-      <Navbar/>
-      <div className="flex">
-        <Link to="/tranfer">
-          <img src={Icontranfer} alt="Icon transfer" className='w-32' />
+      <Navbar />
+      <div className="flex m-5 gap-5 ">
+        <Link to="/tranfer" className="transform transition-transform duration-300 hover:scale-105">
+          <img src={Icontranfer} alt="Icon transfer" className='w-32 shadow-lg rounded-lg hover:shadow-xl' />
         </Link>
-        <img src={Iconenroll} alt="Icon enroll" className='w-32' />
+        {/* <Link to="" className="transform transition-transform duration-300 hover:scale-105"> */}
+          <img src={Iconenroll} alt="Icon enroll" className='w-32 shadow-lg rounded-lg hover:shadow-xl' />
+        {/* </Link> */}
       </div>
+
     </>
 
   );

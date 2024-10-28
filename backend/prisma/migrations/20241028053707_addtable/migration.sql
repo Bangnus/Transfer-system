@@ -45,15 +45,12 @@ CREATE TABLE "Departments" (
 -- CreateTable
 CREATE TABLE "StudentCourse" (
     "id" SERIAL NOT NULL,
-    "courseCode" TEXT NOT NULL,
-    "courseNameTH" TEXT NOT NULL,
-    "courseNameENG" TEXT NOT NULL,
-    "prerequisiteTH" TEXT,
-    "prerequisiteENG" TEXT,
-    "credit" INTEGER NOT NULL,
-    "descriptionTH" TEXT,
-    "descriptionENG" TEXT,
-    "usernameId" TEXT NOT NULL,
+    "courseCode" TEXT,
+    "courseName" TEXT NOT NULL,
+    "credit" TEXT,
+    "grade" TEXT,
+    "description" TEXT,
+    "usernameId" TEXT,
 
     CONSTRAINT "StudentCourse_pkey" PRIMARY KEY ("id")
 );
@@ -63,7 +60,7 @@ CREATE TABLE "SpecialGroup" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "SubjectCategoryID" INTEGER NOT NULL,
-    "secname" TEXT NOT NULL,
+    "secname" TEXT,
 
     CONSTRAINT "SpecialGroup_pkey" PRIMARY KEY ("id")
 );
@@ -85,7 +82,7 @@ CREATE TABLE "SpecialCourse" (
     "courseNameENG" TEXT NOT NULL,
     "prerequisiteTH" TEXT,
     "prerequisiteENG" TEXT,
-    "credit" INTEGER NOT NULL,
+    "credit" TEXT,
     "descriptionTH" TEXT,
     "descriptionENG" TEXT,
     "SubSpecialtyGroupID" INTEGER,
@@ -129,13 +126,26 @@ CREATE TABLE "Course" (
 -- CreateTable
 CREATE TABLE "CourseTransfer" (
     "id" SERIAL NOT NULL,
-    "originalCourseId" INTEGER NOT NULL,
-    "transferredCourseId" INTEGER NOT NULL,
+    "originalCourseId" INTEGER,
+    "transferredCourseId" INTEGER,
+    "specialtransferredCourseId" INTEGER,
     "description" TEXT,
-    "status" "TransferStatus" NOT NULL DEFAULT 'PENDING',
+    "status" "TransferStatus" DEFAULT 'PENDING',
     "dateSubmitted" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "CourseTransfer_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Notification" (
+    "id" SERIAL NOT NULL,
+    "message" TEXT,
+    "isRead" BOOLEAN NOT NULL DEFAULT false,
+    "userId" TEXT,
+    "StdCourseId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -143,9 +153,6 @@ CREATE UNIQUE INDEX "Users_cid_key" ON "Users"("cid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Users_username_key" ON "Users"("username");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Users_depname_key" ON "Users"("depname");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Faculties_faccode_key" ON "Faculties"("faccode");
@@ -160,7 +167,7 @@ CREATE UNIQUE INDEX "Departments_seccode_key" ON "Departments"("seccode");
 ALTER TABLE "Departments" ADD CONSTRAINT "Departments_faccode_fkey" FOREIGN KEY ("faccode") REFERENCES "Faculties"("faccode") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "StudentCourse" ADD CONSTRAINT "StudentCourse_usernameId_fkey" FOREIGN KEY ("usernameId") REFERENCES "Users"("username") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "StudentCourse" ADD CONSTRAINT "StudentCourse_usernameId_fkey" FOREIGN KEY ("usernameId") REFERENCES "Users"("username") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SpecialGroup" ADD CONSTRAINT "SpecialGroup_SubjectCategoryID_fkey" FOREIGN KEY ("SubjectCategoryID") REFERENCES "SubjectCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -178,7 +185,13 @@ ALTER TABLE "Group" ADD CONSTRAINT "Group_subjectCategoryId_fkey" FOREIGN KEY ("
 ALTER TABLE "Course" ADD CONSTRAINT "Course_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CourseTransfer" ADD CONSTRAINT "CourseTransfer_originalCourseId_fkey" FOREIGN KEY ("originalCourseId") REFERENCES "StudentCourse"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CourseTransfer" ADD CONSTRAINT "CourseTransfer_originalCourseId_fkey" FOREIGN KEY ("originalCourseId") REFERENCES "StudentCourse"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CourseTransfer" ADD CONSTRAINT "CourseTransfer_transferredCourseId_fkey" FOREIGN KEY ("transferredCourseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CourseTransfer" ADD CONSTRAINT "CourseTransfer_transferredCourseId_fkey" FOREIGN KEY ("transferredCourseId") REFERENCES "Course"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CourseTransfer" ADD CONSTRAINT "CourseTransfer_specialtransferredCourseId_fkey" FOREIGN KEY ("specialtransferredCourseId") REFERENCES "SpecialCourse"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("username") ON DELETE SET NULL ON UPDATE CASCADE;

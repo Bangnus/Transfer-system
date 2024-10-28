@@ -47,7 +47,7 @@ model Departments {
 // วิชาที่นักศึกษาเพิ่มเอง
 model StudentCourse {
   id              Int              @id @default(autoincrement())
-  courseCode      String
+  courseCode      String?
   courseName      String
   credit          String?
   grade           String?
@@ -55,6 +55,7 @@ model StudentCourse {
   usernameId      String?
   courseTransfers CourseTransfer[]
   user            Users?           @relation(fields: [usernameId], references: [username])
+  Notification    Notification[]
 }
 
 // กลุ่มเรียนเฉพาะ
@@ -146,10 +147,12 @@ enum TransferStatus {
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
-  message   String?
-  isRead    Boolean  @default(false)
-  userId    String?
-  createdAt DateTime @default(now())
-  user      Users?   @relation(fields: [userId], references: [username])
+  id            Int            @id @default(autoincrement())
+  message       String?
+  isRead        Boolean        @default(false)
+  userId        String?
+  StdCourseId   Int?
+  createdAt     DateTime       @default(now())
+  studentcourse StudentCourse? @relation(fields: [StdCourseId], references: [id])
+  user          Users?         @relation(fields: [userId], references: [username])
 }

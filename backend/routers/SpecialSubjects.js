@@ -44,19 +44,11 @@ router.get('/allspecialgroup', async (req, res) => {
 // post
 router.post('/addSubSpecialtyGroup', async (req, res) => {
    try {
-      const { name, SpecialGroupID } = req.body;
-
-      if (!name || name.trim() === '') {
-         return res.status(400).json({ message: 'Sub specialty group name is required' });
-      }
-      if (!SpecialGroupID) {
-         return res.status(400).json({ message: 'Special group ID is required' });
-      }
-
+      const { name } = req.body;
       const SubSpecialtyGroup = await prisma.SubSpecialtyGroup.create({
          data: {
             name,
-            SpecialGroupID,
+
          }
       })
       res.json(SubSpecialtyGroup)

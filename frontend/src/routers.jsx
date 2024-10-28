@@ -7,6 +7,7 @@ import Layoutcourse from './pages/content-addcourse/Layoutcourse.jsx'
 import Addspecialgroup from './pages/connent-subspecialtygroup/subspecialtygroup.jsx'
 import Addcourse from './pages/content-addcourse/addcourse.jsx'
 import DetailStudent from './pages/content-managecourse/detailstudent.jsx'
+import EditTranfer from './pages/content-transfer/editTranfer.jsx';
 
 import ProtectedRoute from './store/ProtectedRoute/ProtectedRoute';
 import PublicRoute from './store/PublicRoute/PublicRoute.jsx';
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
   {
     path: '/personnel',
     element: (
-      <ProtectedRoute allowedTypes={['personnel']}>  {/* อนุญาตเฉพาะ personnel */}
+      <ProtectedRoute allowedTypes={['staff']}>  {/* อนุญาตเฉพาะ staff */}
         <Personnel />
       </ProtectedRoute>
     ),
@@ -41,6 +42,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedTypes={['student']}>
         <Tranfer />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/edit/:id',
+    element: (
+      <ProtectedRoute allowedTypes={['student']}>
+        <EditTranfer/>
       </ProtectedRoute>
     ),
   },
@@ -63,15 +72,15 @@ const router = createBrowserRouter([
   {
     path: '/addspecialgroup',
     element: (
-      <ProtectedRoute allowedTypes={['personnel']}>
+      <ProtectedRoute allowedTypes={['staff']}>
         <Addspecialgroup />
       </ProtectedRoute>
     ),
   },
   {
-    path: '/detail/:firstname',
+    path: '/detail/:courseCode',
     element: (
-      <ProtectedRoute allowedTypes={['personnel']}>
+      <ProtectedRoute allowedTypes={['staff']}>
         <DetailStudent />
       </ProtectedRoute>
     ),

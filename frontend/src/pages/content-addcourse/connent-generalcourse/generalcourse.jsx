@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 const Generalcourse = () => {
     const [selectedGroupId, setSelectedGroupId] = useState(null);
+    const [selectedCourse, setSelectedCourse] = useState(null);
     const dispatch = useDispatch();
     const { data: courses = [], loading, error } = useSelector((state) => state.courses);
 
@@ -22,6 +23,14 @@ const Generalcourse = () => {
         setSelectedGroupId(groupId === selectedGroupId ? null : groupId);
     };
 
+    const handleDetailClick = (course) => {
+        setSelectedCourse(course);
+    }
+
+    const closeModel = () => {
+        setSelectedCourse(null)
+    }
+    console.log(selectedCourse)
     return (
         <div className="container mx-auto py-8 px-4">
             {courses.map((subject) => (
@@ -44,24 +53,33 @@ const Generalcourse = () => {
 
                                         {selectedGroupId === group.id && group.courses && group.courses.length > 0 && (
                                             <div className="mt-4">
-                                                <table className="w-full table-auto border-collapse bg-gray-100 rounded-md">
+                                                <table className="w-full table-auto border-collapse bg-gray-100 rounded-md ">
                                                     <thead>
                                                         <tr className="text-white bg-blue-500">
-                                                            <th className="py-2 px-4 text-left">รหัสวิชา</th>
-                                                            <th className="py-2 px-4 text-left">ชื่อวิชา</th>
-                                                            <th className="py-2 px-4 text-center">หน่วยกิต</th>
-                                                            <th className="py-2 px-4 text-center"></th>
+                                                            <th className="py-2 pr-2 pl-1 text-center">รหัสวิชา</th>
+                                                            <th className="py-2 px-1 text-left">ชื่อวิชา</th>
+                                                            <th className="py-2 px-1 text-center">หน่วยกิต</th>
+                                                            <th className='py-2 px-1 text-center'>รายละเอียด</th>
+                                                            <th className="py-2 px-1 text-center"></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {group.courses.map((course) => (
                                                             <tr key={course.id} className="border-b hover:bg-gray-200">
-                                                                <td className="px-4 py-2">{course.courseCode}</td>
-                                                                <td className="px-4 py-2">{course.courseNameTH}</td>
-                                                                <td className="px-4 py-2 text-center">{course.credit}</td>
-                                                                <td className="px-4 py-2 text-center">
+                                                                <td className="pr-2 pl-1 py-2 text-center">{course.courseCode}</td>
+                                                                <td className="px-1 py-2">{course.courseNameTH}</td>
+                                                                <td className="px-1 py-2 text-center">{course.credit}</td>
+                                                                <td className='px-1 py-2 text-center'>
+                                                                    <button
+                                                                        onClick={() => handleDetailClick(course)}
+                                                                        className='bg-blue-500 text-white px-2 py-1 rounded-md shadow-lg hover:bg-blue-600 transition duration-300'
+                                                                    >
+                                                                        รายละเอียด
+                                                                    </button>
+                                                                </td>
+                                                                <td className="px-1 py-2 text-center">
                                                                     <Link to="/addcourse" state={{ courseId: course.id }}>
-                                                                        <button className="bg-blue-500 text-white px-4 py-1 rounded-md shadow-lg hover:bg-blue-600 transition duration-300">
+                                                                        <button className="bg-blue-500 text-white px-2 py-1 rounded-md shadow-lg hover:bg-blue-600 transition duration-300">
                                                                             เลือก
                                                                         </button>
                                                                     </Link>
@@ -80,6 +98,37 @@ const Generalcourse = () => {
                                 </tr>
                             </tbody>
                         ))}
+                        {selectedCourse && (
+                            <div
+                                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                                onClick={closeModel}
+                            >
+                                <div
+                                    className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative mx-4"
+                                    onClick={(e) => e.stopPropagation()} // ป้องกันการปิด modal เมื่อคลิกในเนื้อหา modal
+                                >
+                                    <h2 className="text-2xl font-semibold mb-4 text-center">รายละเอียดวิชา</h2>
+                                    <div className="text-gray-600 space-y-4 text-sm">
+                                        <p><strong>รหัสวิชา:</strong> {selectedCourse.courseCode}</p>
+                                        <p><strong>ชื่อวิชา (TH):</strong> {selectedCourse.courseNameTH}</p>
+                                        <p><strong>ชื่อวิชา (ENG):</strong> {selectedCourse.courseNameENG}</p>
+                                        <p><strong>วิชาบังคับก่อน:</strong> {selectedCourse.prerequisiteTH || '-'}</p>
+                                        <p><strong>Prerequisite:</strong> {selectedCourse.prerequisiteENG || '-'}</p>
+                                        <p><strong>หน่วยกิต:</strong> {selectedCourse.credit}</p>
+                                        <p><strong>คำอธิบายรายวิชา (TH):</strong> {selectedCourse.descriptionTH}</p>
+                                        <p><strong>คำอธิบายรายวิชา (ENG):</strong> {selectedCourse.descriptionENG}</p>
+                                    </div>
+                                    <button
+                                        onClick={closeModel}
+                                        className="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200 focus:outline-none"
+                                    >
+                                        ปิด
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+
                     </table>
                 </div>
             ))}

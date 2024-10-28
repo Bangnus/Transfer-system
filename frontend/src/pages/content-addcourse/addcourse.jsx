@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addcoursetransfer, coursetransfer } from '../../store/actions/coursetransferActions';
-import Navbar from '../../components/connent-navbar/navbar'
+import Navbar from '../../components/connent-navbar/navbar';
 import axios from 'axios';
+
 const Addcourse = () => {
     const location = useLocation();
     const dispatch = useDispatch();
@@ -17,14 +18,14 @@ const Addcourse = () => {
         originalCourseId: null,
         transferredCourseId: null,
         specialtransferredCourseId: null
-    })
+    });
     const [formData, setFormData] = useState({
         courseCode: '',
         courseName: '',
         credit: '',
         grade: '',
         description: '',
-        usernameId: '',
+        usernameId: user ? user.username : '',
     });
 
     useEffect(() => {
@@ -32,18 +33,19 @@ const Addcourse = () => {
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 usernameId: user.username
-            }))
+            }));
         }
-    }, [user])
-    const [formcourseId, setFormcourseId] = useState(null)
-    console.log(formcourseId)
+    }, [user]);
+
+    const [formcourseId, setFormcourseId] = useState(null);
+    console.log(formcourseId);
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
-        })
-    }
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -56,14 +58,17 @@ const Addcourse = () => {
                 transferredCourseId: courseId,
                 specialtransferredCourseId: specialcourseId,
             };
+
             setFormCourseTransfer(updatedFormCourseTransfer);
 
             await dispatch(coursetransfer(updatedFormCourseTransfer));
 
             await axios.post('http://localhost:5000/api/notify/notification', {
                 username: user.username,
-                message: `ได้เพิ่มข้อมูลใหม่`
-            })
+                message: `ได้เพิ่มข้อมูลใหม่`,
+                StdCourseId: newCourseId,
+            });
+
             navigate('/tranfer');
 
             setFormCourseTransfer({
@@ -78,90 +83,93 @@ const Addcourse = () => {
                 credit: '',
                 grade: '',
                 description: '',
-                usernameId: null
+                usernameId: user.username || '',
             });
-
         } catch (error) {
             console.error('Error adding course', error);
         }
-    }
+    };
 
     return (
-        <div className="">
+        <>
             <Navbar />
-            {user?.username}
-            <div>{courseId}</div>
-            <div >{specialcourseId}</div>
+            <div className="min-h-screen  flex flex-col items-center">
+                <div className="bg-white w-full max-w-md p-8 mt-8 shadow-md rounded-md">
+                    <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">เพิ่มข้อมูลวิชา</h2>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-600">รหัสวิชา</label>
+                            <input
+                                type="text"
+                                name="courseCode"
+                                value={formData.courseCode}
+                                onChange={handleChange}
+                                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                required
+                            />
+                        </div>
 
-            <form onSubmit={handleSubmit}>
-                <div className="">
-                    <label className='' >รหัสวิชา</label>
-                    <input
-                        type="text"
-                        name='courseCode'
-                        value={formData.courseCode}
-                        onChange={handleChange}
-                        className='border border-blue-500'
-                        required
-                    />
+                        <div>
+                            <label className="block text-sm font-medium text-gray-600">ชื่อวิชา</label>
+                            <input
+                                type="text"
+                                name="courseName"
+                                value={formData.courseName}
+                                onChange={handleChange}
+                                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-600">หน่วยกิต</label>
+                            <input
+                                type="text"
+                                name="credit"
+                                value={formData.credit}
+                                onChange={handleChange}
+                                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-600">เกรด</label>
+                            <input
+                                type="text"
+                                name="grade"
+                                value={formData.grade}
+                                onChange={handleChange}
+                                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-600">คำอธิบายวิชา</label>
+                            <textarea
+                                type="text"
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                rows="3"
+                                required
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className={`w-full py-2 mt-4 text-white font-semibold rounded-md ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} transition duration-200`}
+                        >
+                            {loading ? 'กำลังเพิ่ม...' : 'เพิ่มข้อมูล'}
+                        </button>
+                    </form>
                 </div>
+            </div>
+        </>
+    );
+};
 
-                <div className="">
-                    <label className='' >ชื่อวิชา</label>
-                    <input
-                        type="text"
-                        name='courseName'
-                        value={formData.courseName}
-                        onChange={handleChange}
-                        className='border border-blue-500'
-                        required
-                    />
-                </div>
-
-                <div className="">
-                    <label htmlFor="">หน่วยกิต</label>
-                    <input
-                        type="text"
-                        name='credit'
-                        value={formData.credit}
-                        onChange={handleChange}
-                        className=''
-                        required
-                    />
-                </div>
-
-                <div className="">
-                    <label htmlFor="">เกรด</label>
-                    <input
-                        type="text"
-                        name='grade'
-                        value={formData.grade}
-                        onChange={handleChange}
-                        className=''
-                        required
-                    />
-                </div>
-
-                <div className="">
-                    <label htmlFor="">คำอธิบายวิชา</label>
-                    <textarea
-                        type="text"
-                        name='description'
-                        value={formData.description}
-                        onChange={handleChange}
-                        className=''
-                        rows='3'
-                        required
-                    />
-                </div>
-
-
-                <button type='submit' disabled={loading}>
-                    {loading ? 'กำลังเพิ่ม...' : 'เพิ่มข้อมูล'}
-                </button>
-            </form>
-        </div>
-    )
-}
-
-export default Addcourse
+export default Addcourse;
