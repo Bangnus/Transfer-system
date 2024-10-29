@@ -2,7 +2,8 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import Navbar from '../../components/connent-navbar/navbar'
-
+import BreadcrumbsCustom from '../../components/content-Breadcrumbs/Breadcrumbs';
+import Alert from '../../components/content-Alert/alert';
 const EditTranfer = () => {
     const navigate = useNavigate()
     const { id } = useParams()
@@ -11,6 +12,7 @@ const EditTranfer = () => {
     const [credit, setCredit] = useState('')
     const [grade, setGrade] = useState('')
     const [description, setDescription] = useState('')
+    const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,6 +41,11 @@ const EditTranfer = () => {
                 grade,
                 description,
             });
+            setShowAlert(true);
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 3000);
+
             setTimeout(() => {
                 navigate('/tranfer')
             }, 1000);
@@ -46,12 +53,19 @@ const EditTranfer = () => {
             console.error('Error Update information', error);
         }
     }
-
+    const breadcrumbLinks = [
+        { label: "Home", to: "/" },
+        { label: "Tranfer", to: '/tranfer' },
+        { label: "Edit" },
+    ];
     return (
         <>
             <Navbar />
-            <div className='container mx-auto p-5 my-10 bg-white rounded-md shadow-md '>
-                <h1 className='text-2xl font-bold mb-4 text-blue-500'>เเก้ไขข้อมูล</h1>
+            <div className="bg-blue-50 p-2 rounded-md shadow-sm">
+                <BreadcrumbsCustom links={breadcrumbLinks} />
+            </div>
+            <div className='container mx-auto p-5 my-4 bg-white rounded-md shadow-md animate-fade-up animate-once animate-ease-out animate-normal animate-fill-forwards'>
+                <h1 className='text-2xl font-bold mb-4 text-gray-700'>เเก้ไขข้อมูล</h1>
                 <form className='space-y-4 text-gray-700'>
                     <div>
                         <label className='block font-semibold'><strong>รหัสวิชา:</strong></label>
@@ -99,13 +113,19 @@ const EditTranfer = () => {
                             rows='3'
                         />
                     </div>
-                    <div className="">
-                        <button
-                        type='button' 
-                        onClick={handleUpdateInformation}
-                        className='w-full bg-blue-500 text-white px-3 py-2 rounded-md font-semibold hover:bg-blue-600 transition duration-300 ease-in-out'>
-                            อัดเดตข้อมูล
-                        </button>
+                    <div>
+                        {showAlert && (
+                            <Alert message="ข้อมูลอัปเดตเรียบร้อย!" onClose={() => setShowAlert(false)} />
+                        )}
+
+                        <div className="">
+                            <button
+                                type='button'
+                                onClick={handleUpdateInformation}
+                                className='w-full bg-blue-500 text-white px-3 py-2 rounded-md font-semibold hover:bg-blue-600 transition duration-300 ease-in-out'>
+                                อัดเดตข้อมูล
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

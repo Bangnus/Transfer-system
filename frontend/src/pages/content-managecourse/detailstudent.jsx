@@ -39,7 +39,7 @@ const Detailstudent = () => {
                 )
             }));
             navigate('/personnel')
-            
+
             setStatus('');
             setDescription('');
             setSelectedTransferId(null);
@@ -65,7 +65,7 @@ const Detailstudent = () => {
                                 <li><strong>คำอธิบายรายวิชา:</strong> {studentdetail.description}</li>
                             </ul>
                         ) : (
-                            <p className="text-gray-500">กำลังโหลดข้อมูล...</p>
+                            <p className="text-gray-500">ไม่มีข้อมูลรายวิชา</p>
                         )}
                     </div>
 
@@ -75,9 +75,9 @@ const Detailstudent = () => {
                             studentdetail.courseTransfers.map((CourseTransfer) => (
                                 <div key={CourseTransfer.id} className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                     <ul className="text-gray-700 space-y-2">
-                                        <li><strong>รหัสวิชาโอนย้าย:</strong> {CourseTransfer.Course?.courseCode}</li>
-                                        <li><strong>ชื่อวิชาโอนย้าย (TH):</strong> {CourseTransfer.Course?.courseNameTH}</li>
-                                        <li><strong>ชื่อวิชาโอนย้าย (ENG):</strong> {CourseTransfer.Course?.courseNameENG}</li>
+                                        <li><strong>รหัสวิชา:</strong> {CourseTransfer.Course?.courseCode}</li>
+                                        <li><strong>ชื่อวิชา (TH):</strong> {CourseTransfer.Course?.courseNameTH}</li>
+                                        <li><strong>ชื่อวิชา (ENG):</strong> {CourseTransfer.Course?.courseNameENG}</li>
                                         <li><strong>หน่วยกิต:</strong> {CourseTransfer.Course?.credit}</li>
                                         <li><strong>คำอธิบาย (TH):</strong> {CourseTransfer.Course?.descriptionTH}</li>
                                         <li><strong>คำอธิบาย (ENG):</strong> {CourseTransfer.Course?.descriptionENG}</li>

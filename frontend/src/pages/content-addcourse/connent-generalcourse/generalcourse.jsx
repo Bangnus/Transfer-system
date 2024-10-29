@@ -32,7 +32,7 @@ const Generalcourse = () => {
     }
     console.log(selectedCourse)
     return (
-        <div className="container mx-auto py-8 px-4">
+        <div className="container mx-auto py-8 px-4 ">
             {courses.map((subject) => (
                 <div key={subject.id} className="mb-8">
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">{subject.name}</h2>
@@ -72,7 +72,7 @@ const Generalcourse = () => {
                                                                 <td className='px-1 py-2 text-center'>
                                                                     <button
                                                                         onClick={() => handleDetailClick(course)}
-                                                                        className='bg-blue-500 text-white px-2 py-1 rounded-md shadow-lg hover:bg-blue-600 transition duration-300'
+                                                                        className='bg-blue-500 text-white px-2 py-1 rounded-md shadow-lg hover:bg-blue-600 transition duration-300 '
                                                                     >
                                                                         รายละเอียด
                                                                     </button>
@@ -100,11 +100,11 @@ const Generalcourse = () => {
                         ))}
                         {selectedCourse && (
                             <div
-                                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 "
                                 onClick={closeModel}
                             >
                                 <div
-                                    className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative mx-4"
+                                    className={`bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative mx-4 animate-fade-up animate-once animate-ease-in-out animate-normal animate-fill-forwards`}
                                     onClick={(e) => e.stopPropagation()} // ป้องกันการปิด modal เมื่อคลิกในเนื้อหา modal
                                 >
                                     <h2 className="text-2xl font-semibold mb-4 text-center">รายละเอียดวิชา</h2>
@@ -120,15 +120,13 @@ const Generalcourse = () => {
                                     </div>
                                     <button
                                         onClick={closeModel}
-                                        className="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200 focus:outline-none"
+                                        className="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200 focus:outline-none "
                                     >
                                         ปิด
                                     </button>
                                 </div>
                             </div>
                         )}
-
-
                     </table>
                 </div>
             ))}

@@ -128,18 +128,34 @@ router.get('/coursetransfer/:id', async (req, res) => {
     }
 })
 
-router.delete('/coursetransfer/:id', async (req, res) => {
-    const { id } = req.params
-    try{
-        const deletecourse = await prisma.StudentCourse.delete({
-            where: {
-                id: parseInt(id),
-            },
-        })
-        res.json(deletecourse)
-    }catch (error) {
-        res.status(500).json('Failed To  Delete Course', error)
+router.delete('/deletecoursetransfer/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const courseTransfer = await prisma.CourseTransfer.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!courseTransfer) {
+            return res.status(404).json({ error: 'CourseTransfer not found' });
+        }
+
+        const deletedCourseTransfer = await prisma.CourseTransfer.delete({
+            where: { id: parseInt(id) },
+            select: { originalCourseId: true },
+        });
+
+        if (deletedCourseTransfer.originalCourseId) {
+            await prisma.StudentCourse.delete({
+                where: { id: deletedCourseTransfer.originalCourseId },
+            });
+        }
+
+        res.status(200).json({ message: 'Delete Success' });
+    } catch (error) {
+        console.error('Error deleting data:', error);
+        res.status(500).json({ error: 'Error deleting data' });
     }
-})
+});
+
 
 module.exports = router;

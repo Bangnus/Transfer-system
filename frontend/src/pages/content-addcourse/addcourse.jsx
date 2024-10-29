@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addcoursetransfer, coursetransfer } from '../../store/actions/coursetransferActions';
 import Navbar from '../../components/connent-navbar/navbar';
 import axios from 'axios';
+import BreadcrumbsCustom from '../../components/content-Breadcrumbs/Breadcrumbs';
 
 const Addcourse = () => {
     const location = useLocation();
@@ -89,12 +90,20 @@ const Addcourse = () => {
             console.error('Error adding course', error);
         }
     };
-
+    const breadcrumbLinks = [
+        { label: "Home", to: "/" },
+        { label: "Tranfer", to: '/tranfer' },
+        { label: "Course", to: '/course' },
+        { label: "AddCourse" },
+    ];
     return (
         <>
             <Navbar />
-            <div className="min-h-screen  flex flex-col items-center">
-                <div className="bg-white w-full max-w-md p-8 mt-8 shadow-md rounded-md">
+            <div className="bg-blue-50 p-2 rounded-md shadow-sm">
+                <BreadcrumbsCustom links={breadcrumbLinks} />
+            </div>
+            <div className="  flex flex-col items-center my-4 animate-flip-up animate-once animate-ease-in-out animate-normal animate-fill-forwards">
+                <div className="bg-white w-full max-w-md p-5  shadow-md rounded-md">
                     <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">เพิ่มข้อมูลวิชา</h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>

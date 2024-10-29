@@ -20,12 +20,12 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className="flex m-5 gap-5 ">
+      <div className="flex m-5 gap-5 animate-fade animate-once animate-ease-in animate-normal">
         <Link to="/tranfer" className="transform transition-transform duration-300 hover:scale-105">
           <img src={Icontranfer} alt="Icon transfer" className='w-32 shadow-lg rounded-lg hover:shadow-xl' />
         </Link>
         {/* <Link to="" className="transform transition-transform duration-300 hover:scale-105"> */}
-          <img src={Iconenroll} alt="Icon enroll" className='w-32 shadow-lg rounded-lg hover:shadow-xl' />
+        <img src={Iconenroll} alt="Icon enroll" className='w-32 shadow-lg rounded-lg hover:shadow-xl' />
         {/* </Link> */}
       </div>
 

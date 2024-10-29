@@ -150,7 +150,7 @@ const SpecialCourse = () => {
                 onClick={closeModel}
               >
                 <div
-                  className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative mx-4"
+                  className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative mx-4 animate-fade-up animate-once animate-ease-in-out animate-normal animate-fill-forwards"
                   onClick={(e) => e.stopPropagation()} // ป้องกันการปิด modal เมื่อคลิกในเนื้อหา modal
                 >
                   <h2 className="text-2xl font-semibold mb-4 text-center">รายละเอียดวิชา</h2>

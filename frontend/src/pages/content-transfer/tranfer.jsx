@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/connent-navbar/navbar';
-import { Button, Select, Option } from '@material-tailwind/react';
+import { Button } from '@material-tailwind/react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import BreadcrumbsCustom from '../../components/content-Breadcrumbs/Breadcrumbs';
+import ConfirmDeleteModal from '../../components/content-Alert/ConfirmDeleteModal';
 
 const Transfer = () => {
-  const [selecteddetail, setSelecteddetail] = useState(null);
+  const navigate = useNavigate();
+  const [selectedDetail, setSelectedDetail] = useState(null);
   const user = useSelector((state) => state.user.user);
   const username = user?.username;
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [transferId, setTransferId] = useState(null);
 
-  const opendetail = (transfer) => {
-    setSelecteddetail(transfer === selecteddetail ? null : transfer); // เปิด/ปิดข้อมูล
+  const openDetail = (transfer) => {
+    setSelectedDetail(transfer === selectedDetail ? null : transfer); // เปิด/ปิดข้อมูล
   };
 
   useEffect(() => {
@@ -31,23 +35,46 @@ const Transfer = () => {
     if (username) {
       fetchData();
       const interval = setInterval(fetchData, 60000);
-      return () => clearInterval(interval)
+      return () => clearInterval(interval);
     }
   }, [username]);
 
+  const handleDeleteClick = (id) => {
+    setTransferId(id); 
+    setIsModalOpen(true); 
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/api/subject/deletecoursetransfer/${transferId}`);
+      setData((prevData) => prevData.filter((course) => course.id !== transferId));
+      setIsModalOpen(false); 
+      navigate('/tranfer'); 
+    } catch (error) {
+      console.error('Error deleting data', error);
+    }
+  };
+
+  const breadcrumbLinks = [
+    { label: "Home", to: "/" },
+    { label: "Transfer" }
+  ];
 
   return (
     <div>
       <Navbar />
-      <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold text-center mb-6">การเทียบโอนรายวิชา</h1>
-        <div className="flex justify-between items-center mb-4">
+      <div className="bg-blue-50 p-2 rounded-md shadow-sm ">
+      <BreadcrumbsCustom links={breadcrumbLinks} />
+      </div>
+      <div className="container mx-auto p-4 animate-fade animate-once animate-ease-in animate-normal">
+        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">การเทียบโอนรายวิชา</h1>
+        <div className="flex justify-between items-center mb-4 ">
           <Link to="/course">
             <Button color="blue">เพิ่มวิชาเทียบโอน</Button>
           </Link>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto ">
           <table className="min-w-full bg-white rounded-lg shadow-lg">
             <thead className="bg-blue-600 text-white">
               <tr>
@@ -78,7 +105,7 @@ const Transfer = () => {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button
-                          onClick={() => opendetail(transfer)}
+                          onClick={() => openDetail(transfer)}
                           className="bg-blue-500 text-white rounded-md px-4 py-2"
                         >
                           รายละเอียด
@@ -86,11 +113,11 @@ const Transfer = () => {
                       </td>
                     </tr>
 
-                    {selecteddetail === transfer && (
+                    {selectedDetail === transfer && (
                       <tr>
                         <td colSpan="5" className="bg-gray-50 px-6 py-4">
-                          <div className="flex flex-col md:flex-row gap-4">
-                            <div className="w-full md:w-1/2 text-gray-700">
+                          <div className="flex flex-row gap-4">
+                            <div className="w-1/2 text-gray-700">
                               <h3 className="font-semibold text-blue-600 text-lg">ข้อมูลวิชา</h3>
                               <p><strong>รหัสวิชา:</strong> {transfer?.Course?.courseCode || transfer?.SpecialCourse?.courseCode}</p>
                               <p><strong>ชื่อวิชา:</strong> {transfer?.Course?.courseNameTH || transfer?.SpecialCourse?.courseNameTH}</p>
@@ -112,7 +139,7 @@ const Transfer = () => {
 
                             </div>
 
-                            <div className="w-full md:w-1/2 text-gray-700">
+                            <div className="w-1/2 text-gray-700">
                               <h3 className="font-semibold text-blue-600 text-lg">ข้อมูลวิชาของนักศึกษา</h3>
                               <p><strong>รหัสวิชา:</strong> {transfer?.student?.courseCode}</p>
                               <p><strong>ชื่อวิชา:</strong> {transfer?.student?.courseName}</p>
@@ -120,15 +147,16 @@ const Transfer = () => {
                               <p><strong>เกรด:</strong> {transfer?.student?.grade}</p>
                               <p><strong>คำอธิบายรายวิชา:</strong> {transfer?.student?.description}</p>
                               <div className="space-x-3">
-                              <Link to={`/edit/${transfer?.student?.id}`}>
-                                <button className='bg-blue-500 text-white px-2 py-1 rounded-md my-5 hover:bg-blue-600 transition ease-in-out delay-150'>เเก้ไขข้อมูล</button>
-                              </Link>
-                              <button
-                              className='bg-red-500 text-white px-2 py-1 rounded-md my-5 hover:bg-red-600 transition ease-in-out delay-150'
-                              >
-                                ลบข้อมูล
-                              </button>
-                                </div>
+                                <Link to={`/edit/${transfer?.student?.id}`}>
+                                  <button className='bg-blue-500 text-white px-2 py-1 rounded-md my-5 hover:bg-blue-600 transition ease-in-out delay-150'>แก้ไขข้อมูล</button>
+                                </Link>
+                                <button
+                                  onClick={() => handleDeleteClick(transfer.id)}
+                                  className='bg-red-500 text-white px-2 py-1 rounded-md my-5 hover:bg-red-600 transition ease-in-out delay-150'
+                                >
+                                  ลบข้อมูล
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </td>
@@ -146,6 +174,13 @@ const Transfer = () => {
           </table>
         </div>
       </div>
+
+      {/* แสดง Modal ยืนยันการลบ */}
+      <ConfirmDeleteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 };
