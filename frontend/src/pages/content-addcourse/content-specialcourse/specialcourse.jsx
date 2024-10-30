@@ -32,7 +32,7 @@ const SpecialCourse = () => {
     <div className="container mx-auto py-8 px-4">
       {specialcourses.map((subject) => (
         <div key={subject.id} className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">{subject.name}</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 xs:text-[20px]">{subject.name}</h2>
           <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
             {subject.SpecialGroup.map((SpecialGroup, groupIndex) => (
               <tbody key={SpecialGroup.id}>
@@ -40,7 +40,7 @@ const SpecialCourse = () => {
                   <td className="px-4 py-2">
                     <button
                       onClick={() => handleGroupClick(SpecialGroup.id)}
-                      className={`w-full text-left py-2 mb-2 rounded-lg shadow-md transition duration-300 ease-in-out
+                      className={`w-full text-left py-2 mb-2 rounded-lg shadow-md transition duration-300 ease-in-out xs:text-[14px]
                         ${selectedGroupID === SpecialGroup.id
                           ? 'bg-blue-600 text-white'
                           : 'bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white'}`}
@@ -85,7 +85,7 @@ const SpecialCourse = () => {
                           <div key={SubSpecialtyGroup.id}>
                             <button
                               onClick={() => handleSubGroupClick(SubSpecialtyGroup.id)}
-                              className={`w-full text-left py-2 mb-2 rounded-lg shadow-md transition duration-300 ease-in-out
+                              className={`w-full text-left py-2 mb-2 rounded-lg shadow-md transition duration-300 ease-in-out xs:text-[12px]
                                 ${selectedSubGroupID === SubSpecialtyGroup.id
                                   ? 'bg-blue-600 text-white'
                                   : 'bg-blue-100 text-blue-700 hover:bg-blue-500 hover:text-white'}`}
@@ -97,7 +97,7 @@ const SpecialCourse = () => {
 
                             {selectedSubGroupID === SubSpecialtyGroup.id && SubSpecialtyGroup.SpecialCourse && SubSpecialtyGroup.SpecialCourse.length > 0 && (
                               <div className="mt-4">
-                                <table className="w-full text-center border-collapse bg-gray-100 rounded-md">
+                                <table className="w-full text-center border-collapse bg-gray-100 rounded-md xs:text-[10px] sm:text-[12px] xl:text-[12px]">
                                   <thead>
                                     <tr className="text-white bg-blue-500">
                                       <th className="py-2 pr-2 pl-1 text-center">รหัสวิชา</th>
@@ -154,7 +154,7 @@ const SpecialCourse = () => {
                   onClick={(e) => e.stopPropagation()} // ป้องกันการปิด modal เมื่อคลิกในเนื้อหา modal
                 >
                   <h2 className="text-2xl font-semibold mb-4 text-center">รายละเอียดวิชา</h2>
-                  <div className="text-gray-600 space-y-4 text-sm">
+                  <div className="text-gray-600 space-y-2 text-sm xs:text-[10px]">
                     <p><strong>รหัสวิชา:</strong> {selectedCourse.courseCode}</p>
                     <p><strong>ชื่อวิชา (TH):</strong> {selectedCourse.courseNameTH}</p>
                     <p><strong>ชื่อวิชา (ENG):</strong> {selectedCourse.courseNameENG}</p>

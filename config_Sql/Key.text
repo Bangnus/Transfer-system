@@ -1,0 +1,7 @@
+
+
+SECRET_JWT=98ac4f54c5aa4d54aa8s4s5ss4aa77s9c4a5w4s57w5d5r4w44s45w5d54
+
+
+
+DATABASE_URL="postgresql://root:root@postgres:5432/transfer?schema=public"

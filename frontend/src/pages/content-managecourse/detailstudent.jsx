@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams, Navigate, useNavigate } from 'react-router-dom'
 import Navbar from '../../components/connent-navbar/navbar'
+import BreadcrumbsCustom from '../../components/content-Breadcrumbs/Breadcrumbs';
 
 const Detailstudent = () => {
     const navigate = useNavigate()
@@ -48,13 +49,20 @@ const Detailstudent = () => {
             console.error('Error updating status:', error);
         }
     }
+    const breadcrumbLinks = [
+        { label: "Personnel", to: "/" },
+        { label: "Detail" }
+    ];
     return (
         <>
             <Navbar />
-            <div className="container mx-auto p-6">
+            <div className="bg-blue-50 p-2 rounded-md shadow-sm ">
+                <BreadcrumbsCustom links={breadcrumbLinks} />
+            </div>
+            <div className="container mx-auto p-6  animate-fade animate-once animate-ease-in-out animate-normal animate-fill-forwards">
                 <h1 className="text-2xl font-bold mb-6 text-center">รายละเอียดวิชา</h1>
-                <div className="flex gap-6">
-                    <div className="w-1/2 bg-white rounded-lg shadow-lg p-6">
+                <div className="flex gap-6 xs:flex-col sm:flex-col md:flex-col">
+                    <div className="w-1/2 bg-white rounded-lg shadow-lg p-6 xs:w-full sm:w-full md:w-full">
                         <h2 className="text-xl font-semibold mb-4 text-blue-600">ข้อมูลรายวิชา</h2>
                         {studentdetail ? (
                             <ul className="text-gray-700 space-y-2">
@@ -69,7 +77,7 @@ const Detailstudent = () => {
                         )}
                     </div>
 
-                    <div className="w-1/2 bg-white rounded-lg shadow-lg p-6">
+                    <div className="w-1/2 bg-white rounded-lg shadow-lg p-6 xs:w-full sm:w-full md:w-full">
                         <h2 className="text-xl font-semibold mb-4 text-blue-600">ข้อมูลการโอนย้ายวิชา</h2>
                         {studentdetail?.courseTransfers && studentdetail.courseTransfers.length > 0 ? (
                             studentdetail.courseTransfers.map((CourseTransfer) => (

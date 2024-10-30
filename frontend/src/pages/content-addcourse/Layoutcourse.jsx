@@ -16,17 +16,17 @@ const AddCourse = () => {
       <div>
         <Navbar />
       </div>
-      <div className="bg-blue-50 p-2 rounded-md shadow-sm">
+      <div className="bg-blue-50 p-2 rounded-md shadow-sm ">
         <BreadcrumbsCustom links={breadcrumbLinks} />
       </div>
-      <div className="flex m-3  rounded-lg animate-fade animate-once animate-ease-in-out animate-normal animate-fill-forwards">
-        <div className="w-1/2 h-full p-5 border-r ">
+      <div className="flex m-3  rounded-lg xs:flex-col sm:flex-col md:flex-col lg:flex-col animate-fade animate-once animate-ease-in-out animate-normal animate-fill-forwards">
+        <div className="w-1/2 h-full p-5 border-r xs:w-full sm:w-full md:w-full lg:w-full">
           <div className="bg-white p-4 rounded-lg shadow-md  overflow-y-auto ">
             <Generalcourse />
           </div>
         </div>
 
-        <div className="w-1/2 h-full p-5">
+        <div className="w-1/2 h-full p-5 xs:w-full sm:w-full md:w-full lg:w-full">
           <div className="bg-white p-4 rounded-lg shadow-md  overflow-y-auto">
             <Specialcourse />
           </div>

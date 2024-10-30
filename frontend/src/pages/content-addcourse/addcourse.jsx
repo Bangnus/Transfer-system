@@ -104,7 +104,7 @@ const Addcourse = () => {
             </div>
             <div className="  flex flex-col items-center my-4 animate-flip-up animate-once animate-ease-in-out animate-normal animate-fill-forwards">
                 <div className="bg-white w-full max-w-md p-5  shadow-md rounded-md">
-                    <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">เพิ่มข้อมูลวิชา</h2>
+                    <h2 className="text-2xl font-semibold  text-gray-700 mb-6">เพิ่มข้อมูลวิชา</h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-600">รหัสวิชา</label>

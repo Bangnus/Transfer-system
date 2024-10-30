@@ -64,70 +64,72 @@ const EditTranfer = () => {
             <div className="bg-blue-50 p-2 rounded-md shadow-sm">
                 <BreadcrumbsCustom links={breadcrumbLinks} />
             </div>
-            <div className='container mx-auto p-5 my-4 bg-white rounded-md shadow-md animate-fade-up animate-once animate-ease-out animate-normal animate-fill-forwards'>
-                <h1 className='text-2xl font-bold mb-4 text-gray-700'>เเก้ไขข้อมูล</h1>
-                <form className='space-y-4 text-gray-700'>
-                    <div>
-                        <label className='block font-semibold'><strong>รหัสวิชา:</strong></label>
-                        <input
-                            type="text"
-                            value={courseCode}
-                            onChange={(e) => setCourseCode(e.target.value)}
-                            className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                        />
-                    </div>
-                    <div>
-                        <label className='block font-semibold'><strong>ชื่อวิชา:</strong></label>
-                        <input
-                            type="text"
-                            value={courseName}
-                            onChange={(e) => setCourseName(e.target.value)}
-                            className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                        />
-                    </div>
-                    <div>
-                        <label className='block font-semibold'><strong>หน่วยกิต:</strong></label>
-                        <input
-                            type="text"
-                            value={credit}
-                            onChange={(e) => setCredit(e.target.value)}
-                            className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                        />
-                    </div>
-                    <div>
-                        <label className='block font-semibold'><strong>เกรด:</strong></label>
-                        <input
-                            type="text"
-                            value={grade}
-                            onChange={(e) => setGrade(e.target.value)}
-                            className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                        />
-                    </div>
-                    <div>
-                        <label className='block font-semibold'><strong>คำอธิบายรายวิชา:</strong></label>
-                        <textarea
-                            type="text"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                            rows='3'
-                        />
-                    </div>
-                    <div>
-                        {showAlert && (
-                            <Alert message="ข้อมูลอัปเดตเรียบร้อย!" onClose={() => setShowAlert(false)} />
-                        )}
-
-                        <div className="">
-                            <button
-                                type='button'
-                                onClick={handleUpdateInformation}
-                                className='w-full bg-blue-500 text-white px-3 py-2 rounded-md font-semibold hover:bg-blue-600 transition duration-300 ease-in-out'>
-                                อัดเดตข้อมูล
-                            </button>
+            <div className="flex items-center justify-center animate-flip-up animate-once animate-ease-in-out animate-normal animate-fill-forwards">
+                <div className='w-full max-w-md  p-5 my-4 bg-white rounded-md shadow-md '>
+                    <h1 className='text-2xl font-bold mb-4 text-gray-700'>เเก้ไขข้อมูล</h1>
+                    <form className='space-y-4 text-gray-700'>
+                        <div>
+                            <label className='block font-semibold'><strong>รหัสวิชา:</strong></label>
+                            <input
+                                type="text"
+                                value={courseCode}
+                                onChange={(e) => setCourseCode(e.target.value)}
+                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
+                            />
                         </div>
-                    </div>
-                </form>
+                        <div>
+                            <label className='block font-semibold'><strong>ชื่อวิชา:</strong></label>
+                            <input
+                                type="text"
+                                value={courseName}
+                                onChange={(e) => setCourseName(e.target.value)}
+                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
+                            />
+                        </div>
+                        <div>
+                            <label className='block font-semibold'><strong>หน่วยกิต:</strong></label>
+                            <input
+                                type="text"
+                                value={credit}
+                                onChange={(e) => setCredit(e.target.value)}
+                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
+                            />
+                        </div>
+                        <div>
+                            <label className='block font-semibold'><strong>เกรด:</strong></label>
+                            <input
+                                type="text"
+                                value={grade}
+                                onChange={(e) => setGrade(e.target.value)}
+                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
+                            />
+                        </div>
+                        <div>
+                            <label className='block font-semibold'><strong>คำอธิบายรายวิชา:</strong></label>
+                            <textarea
+                                type="text"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
+                                rows='3'
+                            />
+                        </div>
+                        <div>
+                            {showAlert && (
+                                <Alert message="ข้อมูลอัปเดตเรียบร้อย!" onClose={() => setShowAlert(false)} />
+                            )}
+
+                            <div className="">
+                                <button
+                                    type='button'
+                                    onClick={handleUpdateInformation}
+                                    className='w-full bg-blue-500 text-white px-3 py-2 rounded-md font-semibold hover:bg-blue-600 transition duration-300 ease-in-out'>
+                                    อัดเดตข้อมูล
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </>
     )

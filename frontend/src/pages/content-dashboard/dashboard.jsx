@@ -50,27 +50,28 @@ const Dashboard = () => {
   const approvedCount = status.approved.length;
   const rejectedCount = status.rejected.length;
   return (
-    <div className="container mx-auto p-4 animate-fade-up animate-once animate-ease-out animate-normal animate-fill-forwards">
+    <div className="container  p-4 animate-fade-up animate-once animate-ease-out animate-normal animate-fill-forwards">
       <h1 className="text-3xl font-bold text-center mb-6">Dashboard</h1>
-      <div className="flex justify-around items-center gap-x-5">
-        <div className="bg-blue-500 flex flex-col items-center justify-center rounded-lg shadow-lg text-white p-10 w-1/4">
-          <div className="text-xl font-semibold">นักศึกษาทั้งหมด</div>
-          <div className="text-2xl mt-2">จำนวน: {allStudents} คน</div>
+      <div className="flex justify-around items-center gap-x-5 xs:flex-col xs:w-full xs:space-y-5 sm:flex-col sm:space-y-7 md:flex-col md:space-y-10">
+        <div className="bg-blue-500 flex flex-col items-center justify-center rounded-lg shadow-lg text-white p-10 w-1/4 xs:w-full sm:w-full md:w-full lg:p-7 ">
+          <div className="text-xl font-semibold lg:text-[16px] xl:text-[18px]">นักศึกษาทั้งหมด</div>
+          <div className="text-2xl mt-2 lg:text-[20px] xl:text-[20px]">จำนวน: {allStudents} คน</div>
         </div>
-        <div className="bg-orange-500 flex flex-col items-center justify-center rounded-lg shadow-lg text-white p-10 w-1/4">
-          <div className="text-xl font-semibold">วิชาที่รอการอนุมัติ</div>
-          <div className="text-2xl mt-2">จำนวน: {pendingCount} วิชา</div>
+        <div className="bg-orange-500 flex flex-col items-center justify-center rounded-lg shadow-lg text-white p-10 w-1/4 xs:w-full  sm:w-full md:w-full lg:p-7">
+          <div className="text-xl font-semibold lg:text-[16px] xl:text-[18px]">วิชาที่รอการอนุมัติ</div>
+          <div className="text-2xl mt-2 lg:text-[20px] xl:text-[20px]">จำนวน: {pendingCount} วิชา</div>
         </div>
-        <div className="bg-green-500 flex flex-col items-center justify-center rounded-lg shadow-lg text-white p-10 w-1/4">
-          <div className="text-xl font-semibold">วิชาที่ผ่านการอนุมัติ</div>
-          <div className="text-2xl mt-2">จำนวน: {approvedCount} วิชา</div>
+        <div className="bg-green-500 flex flex-col items-center justify-center rounded-lg shadow-lg text-white p-10 w-1/4 xs:w-full  sm:w-full md:w-full lg:p-7">
+          <div className="text-xl font-semibold lg:text-[16px] xl:text-[18px]">วิชาที่ผ่านการอนุมัติ</div>
+          <div className="text-2xl mt-2 lg:text-[20px] xl:text-[20px]">จำนวน: {approvedCount} วิชา</div>
         </div>
-        <div className="bg-red-500 flex flex-col items-center justify-center rounded-lg shadow-lg text-white p-10 w-1/4">
-          <div className="text-xl font-semibold">วิชาที่ถูกปฏิเสธ</div>
-          <div className="text-2xl mt-2">จำนวน: {rejectedCount} วิชา</div>
+        <div className="bg-red-500 flex flex-col items-center justify-center rounded-lg shadow-lg text-white p-10 w-1/4 xs:w-full  sm:w-full md:w-full lg:p-7">
+          <div className="text-xl font-semibold lg:text-[16px] xl:text-[18px]">วิชาที่ถูกปฏิเสธ</div>
+          <div className="text-2xl mt-2 lg:text-[20px] xl:text-[20px]">จำนวน: {rejectedCount} วิชา</div>
         </div>
       </div>
     </div>
+
   );
 };
 

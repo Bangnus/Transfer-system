@@ -40,16 +40,16 @@ const Transfer = () => {
   }, [username]);
 
   const handleDeleteClick = (id) => {
-    setTransferId(id); 
-    setIsModalOpen(true); 
+    setTransferId(id);
+    setIsModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
     try {
       await axios.delete(`http://localhost:5000/api/subject/deletecoursetransfer/${transferId}`);
       setData((prevData) => prevData.filter((course) => course.id !== transferId));
-      setIsModalOpen(false); 
-      navigate('/tranfer'); 
+      setIsModalOpen(false);
+      navigate('/tranfer');
     } catch (error) {
       console.error('Error deleting data', error);
     }
@@ -64,13 +64,13 @@ const Transfer = () => {
     <div>
       <Navbar />
       <div className="bg-blue-50 p-2 rounded-md shadow-sm ">
-      <BreadcrumbsCustom links={breadcrumbLinks} />
+        <BreadcrumbsCustom links={breadcrumbLinks} />
       </div>
       <div className="container mx-auto p-4 animate-fade animate-once animate-ease-in animate-normal">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">การเทียบโอนรายวิชา</h1>
+        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800 xs:text-[24px]">การเทียบโอนรายวิชา</h1>
         <div className="flex justify-between items-center mb-4 ">
           <Link to="/course">
-            <Button color="blue">เพิ่มวิชาเทียบโอน</Button>
+            <Button color="blue" className='xs:px-2 xs:py-2 xs:text-[10px]'>เพิ่มวิชาเทียบโอน</Button>
           </Link>
         </div>
 
@@ -78,11 +78,11 @@ const Transfer = () => {
           <table className="min-w-full bg-white rounded-lg shadow-lg">
             <thead className="bg-blue-600 text-white">
               <tr>
-                <th className="px-6 py-3 text-left font-semibold">รหัสวิชา</th>
-                <th className="px-6 py-3 text-left font-semibold">ชื่อวิชา</th>
-                <th className="px-6 py-3 text-center font-semibold">ท:ป</th>
-                <th className="px-6 py-3 text-center font-semibold">สถานะ</th>
-                <th className="px-6 py-3"></th>
+                <th className="px-6 py-3 text-left font-semibold xs:text-[12px] xs:px-1 xs:py-1 sm:text-[14px] sm:px-2">รหัสวิชา</th>
+                <th className="px-6 py-3 text-left font-semibold xs:text-[12px] xs:px-1 xs:py-1 sm:text-[14px] sm:px-2">ชื่อวิชา</th>
+                <th className="px-6 py-3 text-center font-semibold xs:text-[12px] xs:px-1 xs:py-1 sm:text-[14px] sm:px-2">ท:ป</th>
+                <th className="px-6 py-3 text-center font-semibold xs:text-[12px] xs:px-1 xs:py-1 sm:text-[14px] sm:px-2">สถานะ</th>
+                <th className="px-6 py-3 sm:px-2"></th>
               </tr>
             </thead>
             <tbody>
@@ -90,12 +90,12 @@ const Transfer = () => {
                 data.map((transfer) => (
                   <React.Fragment key={transfer.id}>
                     <tr className="border-b hover:bg-gray-200">
-                      <td className="px-6 py-4">{transfer.Course?.courseCode || transfer.SpecialCourse?.courseCode}</td>
-                      <td className="px-6 py-4">{transfer.Course?.courseNameTH || transfer.SpecialCourse?.courseNameTH}</td>
-                      <td className="px-6 py-4 text-center">{transfer.Course?.credit || transfer.SpecialCourse?.credit}</td>
-                      <td className="px-6 py-4 text-center">
+                      <td className="px-6 py-4 xs:text-[12px] xs:px-1 xs:py-0 sm:text-[14px] sm:px-2">{transfer.Course?.courseCode || transfer.SpecialCourse?.courseCode}</td>
+                      <td className="px-6 py-4 xs:text-[12px] xs:px-1 xs:py-0 sm:text-[14px] sm:px-2">{transfer.Course?.courseNameTH || transfer.SpecialCourse?.courseNameTH}</td>
+                      <td className="px-6 py-4 xs:text-[12px] xs:px-1 xs:py-0 text-center sm:text-[14px] sm:px-2">{transfer.Course?.credit || transfer.SpecialCourse?.credit}</td>
+                      <td className="px-6 py-4 xs:text-[12px] xs:px-1 xs:py-0 text-center sm:text-[14px] sm:px-2">
                         <span
-                          className={`px-2 py-1 rounded-full text-white ${transfer.status === 'PENDING' ? 'bg-orange-500' :
+                          className={`px-2 py-1 xs:text-[12px] xs:px-1 xs:py-1  rounded-full text-white ${transfer.status === 'PENDING' ? 'bg-orange-500' :
                             transfer.status === 'APPROVED' ? 'bg-green-500' : 'bg-red-500'
                             }`}
                         >
@@ -103,10 +103,10 @@ const Transfer = () => {
                             transfer.status === 'APPROVED' ? 'ได้รับการอนุมัติ' : 'ถูกปฏิเสธ'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-6 py-4 text-right xs:text-[12px] xs:px-1">
                         <button
                           onClick={() => openDetail(transfer)}
-                          className="bg-blue-500 text-white rounded-md px-4 py-2"
+                          className="bg-blue-500 text-white rounded-md px-4 py-2 xs:px-1 xs:py-1 sm:text-[14px] sm:px-2 sm:py-1"
                         >
                           รายละเอียด
                         </button>
@@ -116,17 +116,17 @@ const Transfer = () => {
                     {selectedDetail === transfer && (
                       <tr>
                         <td colSpan="5" className="bg-gray-50 px-6 py-4">
-                          <div className="flex flex-row gap-4">
-                            <div className="w-1/2 text-gray-700">
-                              <h3 className="font-semibold text-blue-600 text-lg">ข้อมูลวิชา</h3>
+                          <div className="flex flex-row gap-4 xs:gap-0 xs:flex-col xs:justify-center xs:items-center">
+                            <div className="w-full text-gray-700 xs:text-[12px] border-b border-gray-200 pb-4 mb-4">
+                              <h3 className="font-semibold text-blue-600 text-lg xs:text-[14px] mb-2">ข้อมูลวิชา</h3>
                               <p><strong>รหัสวิชา:</strong> {transfer?.Course?.courseCode || transfer?.SpecialCourse?.courseCode}</p>
                               <p><strong>ชื่อวิชา:</strong> {transfer?.Course?.courseNameTH || transfer?.SpecialCourse?.courseNameTH}</p>
                               <p><strong>วิชาบังคับก่อน:</strong> {transfer?.Course?.prerequisiteTH || transfer?.SpecialCourse?.prerequisiteTH || '-'}</p>
                               <p><strong>หน่วยกิต:</strong> {transfer?.Course?.credit || transfer?.SpecialCourse?.credit}</p>
                               <p><strong>คำอธิบายรายวิชา:</strong> {transfer?.Course?.descriptionTH || transfer?.SpecialCourse?.descriptionTH}</p>
                               <p><strong>สถานะการโอนย้าย:</strong>
-                                <span className={`ml-2 px-2 py-1 rounded-full text-white
-                                ${transfer.status === 'PENDING' ? 'bg-orange-500' :
+                                <span className={`ml-2 px-2 py-1 rounded-full text-white xs:px-0 xs:py-0 xs:text-[10px]
+                               ${transfer.status === 'PENDING' ? 'bg-orange-500' :
                                     transfer.status === 'APPROVED' ? 'bg-green-500' :
                                       transfer.status === 'REJECTED' ? 'bg-red-500' : 'bg-gray-300'
                                   }`}>
@@ -136,23 +136,25 @@ const Transfer = () => {
                                 </span>
                               </p>
                               <p><strong>คำอธิบาย:</strong> {transfer.description || '- '}</p>
-
                             </div>
 
-                            <div className="w-1/2 text-gray-700">
-                              <h3 className="font-semibold text-blue-600 text-lg">ข้อมูลวิชาของนักศึกษา</h3>
+                            <div className="w-full text-gray-700 xs:text-[12px]">
+                              <h3 className="font-semibold text-blue-600 text-lg xs:text-[14px] mb-2">ข้อมูลวิชาของนักศึกษา</h3>
                               <p><strong>รหัสวิชา:</strong> {transfer?.student?.courseCode}</p>
                               <p><strong>ชื่อวิชา:</strong> {transfer?.student?.courseName}</p>
                               <p><strong>หน่วยกิต:</strong> {transfer?.student?.credit}</p>
                               <p><strong>เกรด:</strong> {transfer?.student?.grade}</p>
                               <p><strong>คำอธิบายรายวิชา:</strong> {transfer?.student?.description}</p>
-                              <div className="space-x-3">
+
+                              <div className="flex gap-3 mt-4">
                                 <Link to={`/edit/${transfer?.student?.id}`}>
-                                  <button className='bg-blue-500 text-white px-2 py-1 rounded-md my-5 hover:bg-blue-600 transition ease-in-out delay-150'>แก้ไขข้อมูล</button>
+                                  <button className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200'>
+                                    แก้ไขข้อมูล
+                                  </button>
                                 </Link>
                                 <button
                                   onClick={() => handleDeleteClick(transfer.id)}
-                                  className='bg-red-500 text-white px-2 py-1 rounded-md my-5 hover:bg-red-600 transition ease-in-out delay-150'
+                                  className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200'
                                 >
                                   ลบข้อมูล
                                 </button>
@@ -161,6 +163,7 @@ const Transfer = () => {
                           </div>
                         </td>
                       </tr>
+
                     )}
                   </React.Fragment>
                 ))
