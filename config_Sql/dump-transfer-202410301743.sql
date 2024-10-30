@@ -5,7 +5,7 @@
 -- Dumped from database version 16.4 (Debian 16.4-1.pgdg120+1)
 -- Dumped by pg_dump version 16.4
 
--- Started on 2024-10-30 16:29:19
+-- Started on 2024-10-30 17:43:54
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -573,7 +573,7 @@ CREATE TABLE public._prisma_migrations (
 ALTER TABLE public._prisma_migrations OWNER TO root;
 
 --
--- TOC entry 3276 (class 2604 OID 88916)
+-- TOC entry 3276 (class 2604 OID 89016)
 -- Name: Course id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -581,7 +581,7 @@ ALTER TABLE ONLY public."Course" ALTER COLUMN id SET DEFAULT nextval('public."Co
 
 
 --
--- TOC entry 3277 (class 2604 OID 88925)
+-- TOC entry 3277 (class 2604 OID 89017)
 -- Name: CourseTransfer id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -589,7 +589,7 @@ ALTER TABLE ONLY public."CourseTransfer" ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 3269 (class 2604 OID 88853)
+-- TOC entry 3269 (class 2604 OID 89018)
 -- Name: Departments id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -597,7 +597,7 @@ ALTER TABLE ONLY public."Departments" ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 3268 (class 2604 OID 88844)
+-- TOC entry 3268 (class 2604 OID 89019)
 -- Name: Faculties id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -605,7 +605,7 @@ ALTER TABLE ONLY public."Faculties" ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3275 (class 2604 OID 88907)
+-- TOC entry 3275 (class 2604 OID 89020)
 -- Name: Group id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -613,7 +613,7 @@ ALTER TABLE ONLY public."Group" ALTER COLUMN id SET DEFAULT nextval('public."Gro
 
 
 --
--- TOC entry 3280 (class 2604 OID 88936)
+-- TOC entry 3280 (class 2604 OID 89021)
 -- Name: Notification id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -621,7 +621,7 @@ ALTER TABLE ONLY public."Notification" ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
--- TOC entry 3273 (class 2604 OID 88889)
+-- TOC entry 3273 (class 2604 OID 89022)
 -- Name: SpecialCourse id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -629,7 +629,7 @@ ALTER TABLE ONLY public."SpecialCourse" ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 3271 (class 2604 OID 88871)
+-- TOC entry 3271 (class 2604 OID 89023)
 -- Name: SpecialGroup id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -637,7 +637,7 @@ ALTER TABLE ONLY public."SpecialGroup" ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
--- TOC entry 3270 (class 2604 OID 88862)
+-- TOC entry 3270 (class 2604 OID 89024)
 -- Name: StudentCourse id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -645,7 +645,7 @@ ALTER TABLE ONLY public."StudentCourse" ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 3272 (class 2604 OID 88880)
+-- TOC entry 3272 (class 2604 OID 89025)
 -- Name: SubSpecialtyGroup id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -653,7 +653,7 @@ ALTER TABLE ONLY public."SubSpecialtyGroup" ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- TOC entry 3274 (class 2604 OID 88898)
+-- TOC entry 3274 (class 2604 OID 89026)
 -- Name: SubjectCategory id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -661,7 +661,7 @@ ALTER TABLE ONLY public."SubjectCategory" ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3267 (class 2604 OID 88835)
+-- TOC entry 3267 (class 2604 OID 89027)
 -- Name: Users id; Type: DEFAULT; Schema: public; Owner: root
 --
 
@@ -1243,7 +1243,7 @@ ALTER TABLE ONLY public."SubSpecialtyGroup"
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 
 
--- Completed on 2024-10-30 16:29:19
+-- Completed on 2024-10-30 17:43:54
 
 --
 -- PostgreSQL database dump complete
