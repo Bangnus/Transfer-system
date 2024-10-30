@@ -5,7 +5,7 @@
 -- Dumped from database version 16.4 (Debian 16.4-1.pgdg120+1)
 -- Dumped by pg_dump version 16.4
 
--- Started on 2024-10-29 19:19:25
+-- Started on 2024-10-30 16:29:19
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -102,7 +102,7 @@ CREATE SEQUENCE public."CourseTransfer_id_seq"
 ALTER SEQUENCE public."CourseTransfer_id_seq" OWNER TO root;
 
 --
--- TOC entry 3499 (class 0 OID 0)
+-- TOC entry 3500 (class 0 OID 0)
 -- Dependencies: 236
 -- Name: CourseTransfer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -127,7 +127,7 @@ CREATE SEQUENCE public."Course_id_seq"
 ALTER SEQUENCE public."Course_id_seq" OWNER TO root;
 
 --
--- TOC entry 3500 (class 0 OID 0)
+-- TOC entry 3501 (class 0 OID 0)
 -- Dependencies: 234
 -- Name: Course_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -169,7 +169,7 @@ CREATE SEQUENCE public."Departments_id_seq"
 ALTER SEQUENCE public."Departments_id_seq" OWNER TO root;
 
 --
--- TOC entry 3501 (class 0 OID 0)
+-- TOC entry 3502 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: Departments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -208,7 +208,7 @@ CREATE SEQUENCE public."Faculties_id_seq"
 ALTER SEQUENCE public."Faculties_id_seq" OWNER TO root;
 
 --
--- TOC entry 3502 (class 0 OID 0)
+-- TOC entry 3503 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: Faculties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -247,7 +247,7 @@ CREATE SEQUENCE public."Group_id_seq"
 ALTER SEQUENCE public."Group_id_seq" OWNER TO root;
 
 --
--- TOC entry 3503 (class 0 OID 0)
+-- TOC entry 3504 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: Group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -289,7 +289,7 @@ CREATE SEQUENCE public."Notification_id_seq"
 ALTER SEQUENCE public."Notification_id_seq" OWNER TO root;
 
 --
--- TOC entry 3504 (class 0 OID 0)
+-- TOC entry 3505 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: Notification_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -335,7 +335,7 @@ CREATE SEQUENCE public."SpecialCourse_id_seq"
 ALTER SEQUENCE public."SpecialCourse_id_seq" OWNER TO root;
 
 --
--- TOC entry 3505 (class 0 OID 0)
+-- TOC entry 3506 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: SpecialCourse_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -375,7 +375,7 @@ CREATE SEQUENCE public."SpecialGroup_id_seq"
 ALTER SEQUENCE public."SpecialGroup_id_seq" OWNER TO root;
 
 --
--- TOC entry 3506 (class 0 OID 0)
+-- TOC entry 3507 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: SpecialGroup_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -418,7 +418,7 @@ CREATE SEQUENCE public."StudentCourse_id_seq"
 ALTER SEQUENCE public."StudentCourse_id_seq" OWNER TO root;
 
 --
--- TOC entry 3507 (class 0 OID 0)
+-- TOC entry 3508 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: StudentCourse_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -457,7 +457,7 @@ CREATE SEQUENCE public."SubSpecialtyGroup_id_seq"
 ALTER SEQUENCE public."SubSpecialtyGroup_id_seq" OWNER TO root;
 
 --
--- TOC entry 3508 (class 0 OID 0)
+-- TOC entry 3509 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: SubSpecialtyGroup_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -495,7 +495,7 @@ CREATE SEQUENCE public."SubjectCategory_id_seq"
 ALTER SEQUENCE public."SubjectCategory_id_seq" OWNER TO root;
 
 --
--- TOC entry 3509 (class 0 OID 0)
+-- TOC entry 3510 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: SubjectCategory_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -545,7 +545,7 @@ CREATE SEQUENCE public."Users_id_seq"
 ALTER SEQUENCE public."Users_id_seq" OWNER TO root;
 
 --
--- TOC entry 3510 (class 0 OID 0)
+-- TOC entry 3511 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: Users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
 --
@@ -705,7 +705,7 @@ COPY public."Course" (id, "courseCode", "courseNameTH", "courseNameENG", "prereq
 --
 
 COPY public."CourseTransfer" (id, "originalCourseId", "transferredCourseId", "specialtransferredCourseId", description, status, "dateSubmitted") FROM stdin;
-20	21	5	\N	\N	PENDING	2024-10-29 06:29:44.993
+21	22	5	\N		APPROVED	2024-10-29 15:43:55.595
 \.
 
 
@@ -753,6 +753,8 @@ COPY public."Group" (id, name, "subjectCategoryId") FROM stdin;
 
 COPY public."Notification" (id, message, "isRead", "userId", "createdAt", "StdCourseId") FROM stdin;
 19	ได้เพิ่มข้อมูลใหม่	t	s667415850045	2024-10-29 06:03:54.46	\N
+21	ได้เพิ่มข้อมูลใหม่	t	s667415850045	2024-10-29 06:29:45.047	\N
+22	ได้เพิ่มข้อมูลใหม่	t	s667415850045	2024-10-29 15:43:55.616	22
 6	ได้เพิ่มข้อมูลใหม่	t	s667415850045	2024-10-28 14:58:51.938	\N
 7	ได้เพิ่มข้อมูลใหม่	t	s667415850045	2024-10-28 23:22:16.883	\N
 8	ได้เพิ่มข้อมูลใหม่	t	s667415850045	2024-10-28 23:47:42.355	\N
@@ -767,7 +769,6 @@ COPY public."Notification" (id, message, "isRead", "userId", "createdAt", "StdCo
 17	ได้เพิ่มข้อมูลใหม่	t	s667415850045	2024-10-29 00:41:30.818	\N
 18	ได้เพิ่มข้อมูลใหม่	f	s667415850045	2024-10-29 05:51:00.229	\N
 20	ได้เพิ่มข้อมูลใหม่	t	s667415850045	2024-10-29 06:19:38.041	\N
-21	ได้เพิ่มข้อมูลใหม่	t	s667415850045	2024-10-29 06:29:45.047	21
 \.
 
 
@@ -804,7 +805,7 @@ COPY public."SpecialGroup" (id, name, "SubjectCategoryID", secname) FROM stdin;
 --
 
 COPY public."StudentCourse" (id, "courseCode", "courseName", credit, grade, description, "usernameId") FROM stdin;
-21	aaa	aaaa	aaaa	aaaa	aaaaa	s667415850045
+22	101-110	test	1	4.0	xxx	s667415850045
 \.
 
 
@@ -861,16 +862,16 @@ COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs,
 
 
 --
--- TOC entry 3511 (class 0 OID 0)
+-- TOC entry 3512 (class 0 OID 0)
 -- Dependencies: 236
 -- Name: CourseTransfer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
 
-SELECT pg_catalog.setval('public."CourseTransfer_id_seq"', 20, true);
+SELECT pg_catalog.setval('public."CourseTransfer_id_seq"', 21, true);
 
 
 --
--- TOC entry 3512 (class 0 OID 0)
+-- TOC entry 3513 (class 0 OID 0)
 -- Dependencies: 234
 -- Name: Course_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
@@ -879,7 +880,7 @@ SELECT pg_catalog.setval('public."Course_id_seq"', 20, true);
 
 
 --
--- TOC entry 3513 (class 0 OID 0)
+-- TOC entry 3514 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: Departments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
@@ -888,7 +889,7 @@ SELECT pg_catalog.setval('public."Departments_id_seq"', 1, true);
 
 
 --
--- TOC entry 3514 (class 0 OID 0)
+-- TOC entry 3515 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: Faculties_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
@@ -897,7 +898,7 @@ SELECT pg_catalog.setval('public."Faculties_id_seq"', 1, true);
 
 
 --
--- TOC entry 3515 (class 0 OID 0)
+-- TOC entry 3516 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: Group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
@@ -906,16 +907,16 @@ SELECT pg_catalog.setval('public."Group_id_seq"', 4, true);
 
 
 --
--- TOC entry 3516 (class 0 OID 0)
+-- TOC entry 3517 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: Notification_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
 
-SELECT pg_catalog.setval('public."Notification_id_seq"', 21, true);
+SELECT pg_catalog.setval('public."Notification_id_seq"', 22, true);
 
 
 --
--- TOC entry 3517 (class 0 OID 0)
+-- TOC entry 3518 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: SpecialCourse_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
@@ -924,7 +925,7 @@ SELECT pg_catalog.setval('public."SpecialCourse_id_seq"', 3, true);
 
 
 --
--- TOC entry 3518 (class 0 OID 0)
+-- TOC entry 3519 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: SpecialGroup_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
@@ -933,16 +934,16 @@ SELECT pg_catalog.setval('public."SpecialGroup_id_seq"', 3, true);
 
 
 --
--- TOC entry 3519 (class 0 OID 0)
+-- TOC entry 3520 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: StudentCourse_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
 
-SELECT pg_catalog.setval('public."StudentCourse_id_seq"', 21, true);
+SELECT pg_catalog.setval('public."StudentCourse_id_seq"', 22, true);
 
 
 --
--- TOC entry 3520 (class 0 OID 0)
+-- TOC entry 3521 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: SubSpecialtyGroup_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
@@ -951,7 +952,7 @@ SELECT pg_catalog.setval('public."SubSpecialtyGroup_id_seq"', 7, true);
 
 
 --
--- TOC entry 3521 (class 0 OID 0)
+-- TOC entry 3522 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: SubjectCategory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
@@ -960,7 +961,7 @@ SELECT pg_catalog.setval('public."SubjectCategory_id_seq"', 2, true);
 
 
 --
--- TOC entry 3522 (class 0 OID 0)
+-- TOC entry 3523 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: Users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: root
 --
@@ -1233,7 +1234,16 @@ ALTER TABLE ONLY public."SubSpecialtyGroup"
     ADD CONSTRAINT "SubSpecialtyGroup_SpecialGroupID_fkey" FOREIGN KEY ("SpecialGroupID") REFERENCES public."SpecialGroup"(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 
--- Completed on 2024-10-29 19:19:25
+--
+-- TOC entry 3499 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: root
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
+
+
+-- Completed on 2024-10-30 16:29:19
 
 --
 -- PostgreSQL database dump complete
