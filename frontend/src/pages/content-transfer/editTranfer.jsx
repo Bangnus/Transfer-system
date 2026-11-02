@@ -1,9 +1,9 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import Navbar from '../../components/connent-navbar/navbar'
-import BreadcrumbsCustom from '../../components/content-Breadcrumbs/Breadcrumbs';
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import AppLayout from '../../components/layout/AppLayout';
 import Alert from '../../components/content-Alert/alert';
+
 const EditTranfer = () => {
     const navigate = useNavigate()
     const { id } = useParams()
@@ -13,6 +13,9 @@ const EditTranfer = () => {
     const [grade, setGrade] = useState('')
     const [description, setDescription] = useState('')
     const [showAlert, setShowAlert] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,21 +23,28 @@ const EditTranfer = () => {
                 const res = await axios.get(`http://localhost:5000/api/subject/coursetransfer/${id}`)
                 const course = res.data;
 
-                setCourseCode(course.courseCode);
-                setCourseName(course.courseName);
-                setCredit(course.credit);
-                setGrade(course.grade);
-                setDescription(course.description);
+                // `?? ''` keeps the inputs controlled when a column is empty
+                setCourseCode(course?.courseCode ?? '');
+                setCourseName(course?.courseName ?? '');
+                setCredit(course?.credit ?? '');
+                setGrade(course?.grade ?? '');
+                setDescription(course?.description ?? '');
             } catch (error) {
-                console.error('Error detching course data', error)
+                console.error('Error fetching course data', error)
+                setError('โหลดข้อมูลรายวิชาไม่สำเร็จ')
+            } finally {
+                setLoading(false)
             }
         }
         fetchData();
     }, [id])
 
-    const handleUpdateInformation = async () => {
+    const handleUpdateInformation = async (event) => {
+        event?.preventDefault();
+        setSaving(true);
+        setError('');
         try {
-            const res = await axios.put(`http://localhost:5000/api/subject/coursetransfer/${id}`, {
+            await axios.put(`http://localhost:5000/api/subject/coursetransfer/${id}`, {
                 courseCode,
                 courseName,
                 credit,
@@ -51,87 +61,99 @@ const EditTranfer = () => {
             }, 1000);
         } catch (error) {
             console.error('Error Update information', error);
+            setError('บันทึกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+            setSaving(false);
         }
     }
-    const breadcrumbLinks = [
-        { label: "Home", to: "/" },
-        { label: "Tranfer", to: '/tranfer' },
-        { label: "Edit" },
-    ];
-    return (
-        <>
-            <Navbar />
-            <div className="bg-blue-50 p-2 rounded-md shadow-sm">
-                <BreadcrumbsCustom links={breadcrumbLinks} />
-            </div>
-            <div className="flex items-center justify-center animate-flip-up animate-once animate-ease-in-out animate-normal animate-fill-forwards">
-                <div className='w-full max-w-md  p-5 my-4 bg-white rounded-md shadow-md '>
-                    <h1 className='text-2xl font-bold mb-4 text-gray-700'>เเก้ไขข้อมูล</h1>
-                    <form className='space-y-4 text-gray-700'>
-                        <div>
-                            <label className='block font-semibold'><strong>รหัสวิชา:</strong></label>
-                            <input
-                                type="text"
-                                value={courseCode}
-                                onChange={(e) => setCourseCode(e.target.value)}
-                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                            />
-                        </div>
-                        <div>
-                            <label className='block font-semibold'><strong>ชื่อวิชา:</strong></label>
-                            <input
-                                type="text"
-                                value={courseName}
-                                onChange={(e) => setCourseName(e.target.value)}
-                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                            />
-                        </div>
-                        <div>
-                            <label className='block font-semibold'><strong>หน่วยกิต:</strong></label>
-                            <input
-                                type="text"
-                                value={credit}
-                                onChange={(e) => setCredit(e.target.value)}
-                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                            />
-                        </div>
-                        <div>
-                            <label className='block font-semibold'><strong>เกรด:</strong></label>
-                            <input
-                                type="text"
-                                value={grade}
-                                onChange={(e) => setGrade(e.target.value)}
-                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                            />
-                        </div>
-                        <div>
-                            <label className='block font-semibold'><strong>คำอธิบายรายวิชา:</strong></label>
-                            <textarea
-                                type="text"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                className='w-full p-2 border rounded border-gray-300 focus:outline-none focus:ring-1 '
-                                rows='3'
-                            />
-                        </div>
-                        <div>
-                            {showAlert && (
-                                <Alert message="ข้อมูลอัปเดตเรียบร้อย!" onClose={() => setShowAlert(false)} />
-                            )}
 
-                            <div className="">
-                                <button
-                                    type='button'
-                                    onClick={handleUpdateInformation}
-                                    className='w-full bg-blue-500 text-white px-3 py-2 rounded-md font-semibold hover:bg-blue-600 transition duration-300 ease-in-out'>
-                                    อัดเดตข้อมูล
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+    const breadcrumbLinks = [
+        { label: 'หน้าหลัก', to: '/home' },
+        { label: 'เทียบโอนรายวิชา', to: '/tranfer' },
+        { label: 'แก้ไขข้อมูลรายวิชา' },
+    ];
+
+    return (
+        <AppLayout breadcrumbs={breadcrumbLinks}>
+            {showAlert && (
+                <Alert message="ข้อมูลอัปเดตเรียบร้อย!" onClose={() => setShowAlert(false)} />
+            )}
+
+            <div className="page-head">
+                <div>
+                    <h1 className="page-title">แก้ไขข้อมูลรายวิชา</h1>
+                    <p className="page-sub">ข้อมูลของรายวิชาที่คุณนำมาขอเทียบโอน</p>
                 </div>
             </div>
-        </>
+
+            <div className="card max-w-2xl">
+                {loading ? (
+                    <p className="card-pad text-sm text-slate-500">กำลังโหลดข้อมูล...</p>
+                ) : (
+                    <form onSubmit={handleUpdateInformation}>
+                        <div className="card-pad grid gap-5 sm:grid-cols-6">
+                            <div className="sm:col-span-2">
+                                <label htmlFor="courseCode" className="label">รหัสวิชา</label>
+                                <input
+                                    id="courseCode"
+                                    type="text"
+                                    value={courseCode}
+                                    onChange={(e) => setCourseCode(e.target.value)}
+                                    className="field font-mono"
+                                />
+                            </div>
+                            <div className="sm:col-span-4">
+                                <label htmlFor="courseName" className="label">ชื่อวิชา</label>
+                                <input
+                                    id="courseName"
+                                    type="text"
+                                    value={courseName}
+                                    onChange={(e) => setCourseName(e.target.value)}
+                                    className="field"
+                                />
+                            </div>
+                            <div className="sm:col-span-3">
+                                <label htmlFor="credit" className="label">หน่วยกิต</label>
+                                <input
+                                    id="credit"
+                                    type="text"
+                                    inputMode="numeric"
+                                    value={credit}
+                                    onChange={(e) => setCredit(e.target.value)}
+                                    className="field num"
+                                />
+                            </div>
+                            <div className="sm:col-span-3">
+                                <label htmlFor="grade" className="label">เกรด</label>
+                                <input
+                                    id="grade"
+                                    type="text"
+                                    value={grade}
+                                    onChange={(e) => setGrade(e.target.value)}
+                                    className="field"
+                                />
+                            </div>
+                            <div className="sm:col-span-6">
+                                <label htmlFor="description" className="label">คำอธิบายรายวิชา</label>
+                                <textarea
+                                    id="description"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    className="field"
+                                    rows={5}
+                                />
+                            </div>
+                            {error && <p role="alert" className="text-sm font-medium text-red-600 sm:col-span-6">{error}</p>}
+                        </div>
+                        <div className="flex flex-col-reverse gap-2 border-t border-slate-100 px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
+                            <Link to="/tranfer" className="btn-secondary">ยกเลิก</Link>
+                            <button type="submit" disabled={saving} className="btn-primary">
+                                {saving ? 'กำลังบันทึก...' : 'บันทึกการแก้ไข'}
+                            </button>
+                        </div>
+                    </form>
+                )}
+            </div>
+        </AppLayout>
     )
 }
 

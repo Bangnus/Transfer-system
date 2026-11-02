@@ -1,8 +1,23 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useParams, Navigate, useNavigate } from 'react-router-dom'
-import Navbar from '../../components/connent-navbar/navbar'
-import BreadcrumbsCustom from '../../components/content-Breadcrumbs/Breadcrumbs';
+import { useParams, useNavigate } from 'react-router-dom'
+import { DocumentMagnifyingGlassIcon, AcademicCapIcon, BuildingLibraryIcon } from '@heroicons/react/24/outline';
+import AppLayout from '../../components/layout/AppLayout';
+import StatusBadge from '../../components/ui/StatusBadge';
+import EmptyState from '../../components/ui/EmptyState';
+
+const show = (v) => {
+    const s = typeof v === 'string' ? v.trim() : v;
+    return s === null || s === undefined || s === '' ? '-' : s;
+};
+
+// Highlighted figures (credits, grade) that staff compare side by side
+const Figure = ({ label, value }) => (
+    <div className="rounded-lg bg-slate-50 px-4 py-3 ring-1 ring-inset ring-slate-200">
+        <div className="text-xs text-slate-500">{label}</div>
+        <div className="num mt-0.5 text-2xl font-semibold text-slate-900">{show(value)}</div>
+    </div>
+);
 
 const Detailstudent = () => {
     const navigate = useNavigate()
@@ -11,6 +26,10 @@ const Detailstudent = () => {
     const [status, setStatus] = useState('')
     const [description, setDescription] = useState('')
     const [selectedTransferId, setSelectedTransferId] = useState(null)
+    // UI-only
+    const [loading, setLoading] = useState(true)
+    const [saving, setSaving] = useState(false)
+    const [error, setError] = useState('')
 
     useEffect(() => {
         const fetchStudentDetail = async () => {
@@ -19,6 +38,8 @@ const Detailstudent = () => {
                 setStudentdetail(res.data[0])
             } catch (error) {
                 console.error('fetch StudentDetail fail', error)
+            } finally {
+                setLoading(false)
             }
         };
 
@@ -28,6 +49,8 @@ const Detailstudent = () => {
     }, [courseCode])
 
     const handleUpdateStatus = async (transferId) => {
+        setSaving(true)
+        setError('')
         try {
             const res = await axios.put(`http://localhost:5000/api/manage/status/${transferId}`, {
                 description,
@@ -47,109 +70,163 @@ const Detailstudent = () => {
 
         } catch (error) {
             console.error('Error updating status:', error);
+            setError('อัปเดตสถานะไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+        } finally {
+            setSaving(false)
         }
     }
+
+    // Start editing a transfer: seed both fields from its current values, so a change to only
+    // one field still sends the other one (before, changing only the note sent an empty status)
+    const beginEdit = (transfer) => {
+        if (selectedTransferId === transfer.id) return;
+        setSelectedTransferId(transfer.id);
+        setStatus(transfer.status);
+        setDescription(transfer.description || '');
+        setError('');
+    };
+
     const breadcrumbLinks = [
-        { label: "Personnel", to: "/" },
-        { label: "Detail" }
+        { label: "งานเทียบโอน", to: "/personnel" },
+        { label: "ตรวจสอบคำร้อง" }
     ];
+
+    const transfers = studentdetail?.courseTransfers || [];
+
     return (
-        <>
-            <Navbar />
-            <div className="bg-blue-50 p-2 rounded-md shadow-sm ">
-                <BreadcrumbsCustom links={breadcrumbLinks} />
+        <AppLayout breadcrumbs={breadcrumbLinks}>
+            <div className="page-head">
+                <div className="min-w-0">
+                    <h1 className="page-title">ตรวจสอบคำร้องเทียบโอน</h1>
+                    <p className="page-sub">
+                        {studentdetail
+                            ? <>รหัสวิชา <span className="code">{studentdetail.courseCode}</span> · รหัสนักศึกษา <span className="code">{show(studentdetail.usernameId)}</span></>
+                            : 'รายละเอียดวิชา'}
+                    </p>
+                </div>
             </div>
-            <div className="container mx-auto p-6  animate-fade animate-once animate-ease-in-out animate-normal animate-fill-forwards">
-                <h1 className="text-2xl font-bold mb-6 text-center">รายละเอียดวิชา</h1>
-                <div className="flex gap-6 xs:flex-col sm:flex-col md:flex-col">
-                    <div className="w-1/2 bg-white rounded-lg shadow-lg p-6 xs:w-full sm:w-full md:w-full">
-                        <h2 className="text-xl font-semibold mb-4 text-blue-600">ข้อมูลรายวิชา</h2>
-                        {studentdetail ? (
-                            <ul className="text-gray-700 space-y-2">
-                                <li><strong>รหัสวิชา:</strong> {studentdetail.courseCode}</li>
-                                <li><strong>ชื่อวิชา:</strong> {studentdetail.courseName}</li>
-                                <li><strong>หน่วยกิต:</strong> {studentdetail.credit}</li>
-                                <li><strong>เกรด:</strong> {studentdetail.grade}</li>
-                                <li><strong>คำอธิบายรายวิชา:</strong> {studentdetail.description}</li>
-                            </ul>
-                        ) : (
-                            <p className="text-gray-500">ไม่มีข้อมูลรายวิชา</p>
-                        )}
-                    </div>
 
-                    <div className="w-1/2 bg-white rounded-lg shadow-lg p-6 xs:w-full sm:w-full md:w-full">
-                        <h2 className="text-xl font-semibold mb-4 text-blue-600">ข้อมูลการโอนย้ายวิชา</h2>
-                        {studentdetail?.courseTransfers && studentdetail.courseTransfers.length > 0 ? (
-                            studentdetail.courseTransfers.map((CourseTransfer) => (
-                                <div key={CourseTransfer.id} className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                                    <ul className="text-gray-700 space-y-2">
-                                        <li><strong>รหัสวิชา:</strong> {CourseTransfer.Course?.courseCode}</li>
-                                        <li><strong>ชื่อวิชา (TH):</strong> {CourseTransfer.Course?.courseNameTH}</li>
-                                        <li><strong>ชื่อวิชา (ENG):</strong> {CourseTransfer.Course?.courseNameENG}</li>
-                                        <li><strong>หน่วยกิต:</strong> {CourseTransfer.Course?.credit}</li>
-                                        <li><strong>คำอธิบาย (TH):</strong> {CourseTransfer.Course?.descriptionTH}</li>
-                                        <li><strong>คำอธิบาย (ENG):</strong> {CourseTransfer.Course?.descriptionENG}</li>
-                                        <li><strong>สถานะการโอนย้าย:</strong>
-                                            <span className={`ml-2 px-3 py-1 rounded-full text-white ${CourseTransfer.status === 'PENDING' ? 'bg-orange-500' :
-                                                CourseTransfer.status === 'APPROVED' ? 'bg-green-500' :
-                                                    CourseTransfer.status === 'REJECTED' ? 'bg-red-500' : 'bg-gray-300'}`}>
-                                                {CourseTransfer.status === 'PENDING' ? 'รอดำเนินการ' :
-                                                    CourseTransfer.status === 'APPROVED' ? 'ได้รับการอนุมัติ' :
-                                                        CourseTransfer.status === 'REJECTED' ? 'ถูกปฏิเสธ' : CourseTransfer.status}
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <strong>คำอธิบาย:</strong> {CourseTransfer?.description || 'ไม่มีคำอธิบาย'}
-                                        </li>
-                                        <li>
-                                            <strong>สถานะการโอนย้าย:</strong>
-                                            <select
-                                                id={`status-select-${CourseTransfer.id}`}
-                                                value={selectedTransferId === CourseTransfer.id ? status : CourseTransfer.status}
-                                                onChange={(e) => {
-                                                    setStatus(e.target.value);
-                                                    setSelectedTransferId(CourseTransfer.id);
-                                                }}
-                                            >
-                                                <option value="PENDING">รอดำเนินการ</option>
-                                                <option value="APPROVED">ได้รับการอนุมัติ</option>
-                                                <option value="REJECTED">ถูกปฏิเสธ</option>
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <div className="mb-2">
-                                                <strong>คำอธิบาย:</strong>
+            {loading ? (
+                <p className="text-sm text-slate-500">กำลังโหลดข้อมูล…</p>
+            ) : !studentdetail ? (
+                <div className="card"><EmptyState icon={DocumentMagnifyingGlassIcon} title="ไม่มีข้อมูลรายวิชา" /></div>
+            ) : (
+                <div className="grid items-start gap-6 lg:grid-cols-2">
+                    {/* Student's course */}
+                    <section className="card lg:sticky lg:top-24" aria-labelledby="own-course-title">
+                        <div className="card-head">
+                            <div className="flex min-w-0 items-center gap-3">
+                                <span className="stat-icon bg-gold-50 text-gold-600"><AcademicCapIcon aria-hidden="true" /></span>
+                                <div className="min-w-0">
+                                    <p className="section-label">วิชาที่นำมาเทียบ</p>
+                                    <h2 id="own-course-title" className="card-title">{show(studentdetail.courseName)}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-pad space-y-5">
+                            <div className="grid grid-cols-2 gap-3">
+                                <Figure label="หน่วยกิต" value={studentdetail.credit} />
+                                <Figure label="เกรด" value={studentdetail.grade} />
+                            </div>
+                            <dl className="dl">
+                                <dt>รหัสวิชา</dt><dd className="code">{show(studentdetail.courseCode)}</dd>
+                                <dt>ชื่อวิชา</dt><dd>{show(studentdetail.courseName)}</dd>
+                                <dt>คำอธิบายรายวิชา</dt><dd className="leading-relaxed">{show(studentdetail.description)}</dd>
+                            </dl>
+                        </div>
+                    </section>
+
+                    {/* University course(s) + decision */}
+                    <div className="space-y-6">
+                        {transfers.length > 0 ? (
+                            transfers.map((CourseTransfer) => {
+                                // The target is either a general-education course or a specialised one
+                                const target = CourseTransfer.Course ?? CourseTransfer.SpecialCourse;
+                                const catalogue = CourseTransfer.Course ? 'หมวดวิชาศึกษาทั่วไป' : CourseTransfer.SpecialCourse ? 'หมวดวิชาเฉพาะ' : null;
+                                const editing = selectedTransferId === CourseTransfer.id;
+                                const changed = editing && (status !== CourseTransfer.status || description !== (CourseTransfer.description || ''));
+                                return (
+                                    <section key={CourseTransfer.id} className="card" aria-labelledby={`target-title-${CourseTransfer.id}`}>
+                                        <div className="card-head">
+                                            <div className="flex min-w-0 items-center gap-3">
+                                                <span className="stat-icon bg-navy-50 text-navy-700"><BuildingLibraryIcon aria-hidden="true" /></span>
+                                                <div className="min-w-0">
+                                                    <p className="section-label">วิชาของมหาวิทยาลัย</p>
+                                                    <h2 id={`target-title-${CourseTransfer.id}`} className="card-title">{show(target?.courseNameTH)}</h2>
+                                                </div>
                                             </div>
-                                            <textarea
-                                                type="text"
-                                                id={`description-${CourseTransfer.id}`}
-                                                value={selectedTransferId === CourseTransfer.id ? description : CourseTransfer.description || ''}
-                                                onChange={(e) => setDescription(e.target.value)}
-                                                className="border rounded p-1 w-full"
-                                                rows="3"
-                                            />
-                                        </li>
-
-                                        <div className="flex justify-end">
-                                            <button
-                                                onClick={() => handleUpdateStatus(CourseTransfer.id)}
-                                                className="mt-4 bg-blue-500 text-white rounded px-4 py-2"
-                                            >
-                                                อัปเดตสถานะ
-                                            </button>
+                                            {catalogue && <span className="badge-navy">{catalogue}</span>}
+                                        </div>
+                                        <div className="card-pad space-y-5">
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <Figure label="หน่วยกิต" value={target?.credit} />
+                                                <div className="rounded-lg px-4 py-3 ring-1 ring-inset ring-slate-200">
+                                                    <div className="text-xs text-slate-500">สถานะปัจจุบัน</div>
+                                                    <div className="mt-1.5"><StatusBadge status={CourseTransfer.status} /></div>
+                                                </div>
+                                            </div>
+                                            <dl className="dl">
+                                                <dt>รหัสวิชา</dt><dd className="code">{show(target?.courseCode)}</dd>
+                                                <dt>ชื่อวิชา (TH)</dt><dd>{show(target?.courseNameTH)}</dd>
+                                                <dt>ชื่อวิชา (ENG)</dt><dd>{show(target?.courseNameENG)}</dd>
+                                                <dt>คำอธิบาย (TH)</dt><dd className="leading-relaxed">{show(target?.descriptionTH)}</dd>
+                                                <dt>คำอธิบาย (ENG)</dt><dd className="leading-relaxed">{show(target?.descriptionENG)}</dd>
+                                                <dt>คำอธิบายปัจจุบัน</dt><dd className="text-slate-600">{CourseTransfer?.description || 'ไม่มีคำอธิบาย'}</dd>
+                                            </dl>
                                         </div>
 
-
-                                    </ul>
-                                </div>
-                            ))
+                                        <form
+                                            className="space-y-4 border-t border-slate-100 bg-slate-50/60 px-5 py-5 sm:px-6"
+                                            onSubmit={(e) => { e.preventDefault(); handleUpdateStatus(CourseTransfer.id); }}
+                                        >
+                                            <h3 className="section-label">ผลการพิจารณา</h3>
+                                            <div>
+                                                <label htmlFor={`status-select-${CourseTransfer.id}`} className="label">สถานะการโอนย้าย</label>
+                                                <select
+                                                    id={`status-select-${CourseTransfer.id}`}
+                                                    className="field"
+                                                    value={editing ? status : CourseTransfer.status}
+                                                    onChange={(e) => {
+                                                        beginEdit(CourseTransfer);
+                                                        setStatus(e.target.value);
+                                                    }}
+                                                >
+                                                    <option value="PENDING">รอดำเนินการ</option>
+                                                    <option value="APPROVED">ได้รับการอนุมัติ</option>
+                                                    <option value="REJECTED">ถูกปฏิเสธ</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label htmlFor={`description-${CourseTransfer.id}`} className="label">คำอธิบาย</label>
+                                                <textarea
+                                                    id={`description-${CourseTransfer.id}`}
+                                                    className="field"
+                                                    value={editing ? description : CourseTransfer.description || ''}
+                                                    onChange={(e) => {
+                                                        beginEdit(CourseTransfer);
+                                                        setDescription(e.target.value);
+                                                    }}
+                                                    rows="3"
+                                                    placeholder="เหตุผลประกอบการพิจารณา"
+                                                />
+                                            </div>
+                                            {error && editing && <p className="text-sm text-red-600" role="alert">{error}</p>}
+                                            <div className="flex justify-end">
+                                                <button type="submit" className="btn-primary w-full sm:w-auto" disabled={!changed || saving}>
+                                                    {saving && editing ? 'กำลังบันทึก…' : 'อัปเดตสถานะ'}
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </section>
+                                );
+                            })
                         ) : (
-                            <p className="text-gray-500">ไม่มีข้อมูลการโอนย้ายรายวิชา</p>
+                            <div className="card"><EmptyState title="ไม่มีข้อมูลการโอนย้ายรายวิชา" /></div>
                         )}
                     </div>
                 </div>
-            </div>
-        </>
+            )}
+        </AppLayout>
     )
 }
 

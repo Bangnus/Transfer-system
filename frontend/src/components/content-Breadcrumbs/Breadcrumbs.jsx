@@ -1,27 +1,22 @@
-import React from 'react';
-import { Breadcrumbs } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
+import { ChevronRightIcon } from '@heroicons/react/20/solid';
 
-const BreadcrumbsCustom = ({ links }) => {
-    return (
-        <div className=" ml-3">
-            <Breadcrumbs className="bg-gray-100 px-4 py-2 rounded-md shadow">
-                {links.map((link, index) =>
-                    link.to ? (
-                        <Link
-                            key={index}
-                            to={link.to}
-                            className="text-blue-500 hover:underline"
-                        >
-                            {link.label}
-                        </Link>
+// links: [{ label, to? }] — the last item (no `to`) is the current page
+const BreadcrumbsCustom = ({ links }) => (
+    <nav aria-label="breadcrumb" className="mb-4 overflow-x-auto">
+        <ol className="flex items-center gap-1.5 whitespace-nowrap text-sm text-slate-500">
+            {links.map((link, index) => (
+                <li key={index} className="flex items-center gap-1.5">
+                    {index > 0 && <ChevronRightIcon className="h-4 w-4 text-slate-300" aria-hidden="true" />}
+                    {link.to ? (
+                        <Link to={link.to} className="rounded underline-offset-4 hover:text-navy-700 hover:underline">{link.label}</Link>
                     ) : (
-                        <span key={index}>{link.label}</span>
-                    )
-                )}
-            </Breadcrumbs>
-        </div>
-    );
-};
+                        <span aria-current="page" className="font-medium text-slate-700">{link.label}</span>
+                    )}
+                </li>
+            ))}
+        </ol>
+    </nav>
+);
 
 export default BreadcrumbsCustom;

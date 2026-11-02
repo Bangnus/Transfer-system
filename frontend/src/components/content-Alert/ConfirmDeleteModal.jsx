@@ -1,30 +1,26 @@
-import React from 'react';
+import { ExclamationTriangleIcon, TrashIcon } from '@heroicons/react/24/outline';
+import Modal from '../ui/Modal';
 
-const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm }) => {
-    if (!isOpen) return null;
-    
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 ">
-            <div className="bg-white rounded-lg p-5 w-1/3 shadow-lg  animate-jump-in animate-once animate-ease-out animate-normal animate-fill-forwards">
-                <h2 className="text-lg font-bold mb-4 xs:text-[12px] ">ยืนยันการลบข้อมูล</h2>
-                <p className="mb-4 xs:text-[12px]">คุณแน่ใจหรือว่าต้องการลบข้อมูลนี้?</p>
-                <div className="flex justify-end">
-                    <button
-                        onClick={onClose}
-                        className="mr-2 bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 xs:px-1 xs:py-0 xs:text-[10px]"
-                        >
-                        ยกเลิก
-                    </button>
-                    <button
-                        onClick={onConfirm}
-                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition ease-in-out delay-150 xs:text-[10px]"
-                    >
-                        ยืนยันการลบ
-                    </button>
-                </div>
-            </div>
+const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm }) => (
+    <Modal
+        open={isOpen}
+        onClose={onClose}
+        title="ยืนยันการลบข้อมูล"
+        size="sm:max-w-md"
+        footer={
+            <>
+                <button type="button" onClick={onClose} className="btn-secondary">ยกเลิก</button>
+                <button type="button" onClick={onConfirm} className="btn-danger"><TrashIcon />ยืนยันการลบ</button>
+            </>
+        }
+    >
+        <div className="flex gap-4">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600">
+                <ExclamationTriangleIcon className="h-5 w-5" aria-hidden="true" />
+            </span>
+            <p className="pt-2 text-sm text-slate-600">คุณแน่ใจหรือว่าต้องการลบข้อมูลนี้? ลบแล้วจะกู้คืนไม่ได้</p>
         </div>
-    );
-};
-export default ConfirmDeleteModal;
+    </Modal>
+);
 
+export default ConfirmDeleteModal;
