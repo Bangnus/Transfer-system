@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "src/index.css"
+        ],
+        "createdAt": "2026-11-02T03:28:47.634Z",
+        "reason": "Claude: L39 is .btn-secondary, slate-700 text on a white button; the detector reads the hover/active utilities as a coloured fill"
+      }
+    ]
+  }
+}
